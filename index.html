@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lethe - Autonomous Executive Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            background: #000000;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .avatar {
+            max-width: 400px;
+            margin: 0 auto 2rem;
+            display: block;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #00d4ff 0%, #0096ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            color: #8bb4d0;
+            margin-bottom: 3rem;
+        }
+
+        .intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+            font-size: 1.2rem;
+            color: #b0c4d4;
+            line-height: 1.8;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 200, 255, 0.2);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 200, 255, 0.5);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature h3 {
+            color: #00d4ff;
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .feature p {
+            color: #a0b4c4;
+        }
+
+        .cta {
+            text-align: center;
+            margin: 4rem 0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 3rem;
+            background: linear-gradient(135deg, #00d4ff 0%, #0096ff 100%);
+            color: #0a0e27;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 150, 255, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 30px rgba(0, 150, 255, 0.5);
+        }
+
+        .warning {
+            background: rgba(255, 100, 100, 0.1);
+            border: 1px solid rgba(255, 100, 100, 0.3);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 3rem auto;
+            max-width: 800px;
+        }
+
+        .warning h3 {
+            color: #ff6b6b;
+            margin-bottom: 0.5rem;
+        }
+
+        .warning p {
+            color: #ffb3b3;
+            font-size: 0.95rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: #6b8090;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 4rem;
+        }
+
+        footer a {
+            color: #00d4ff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .avatar {
+                max-width: 250px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .tagline {
+                font-size: 1.2rem;
+            }
+
+            .intro {
+                font-size: 1rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="avatar">
+                <img src="lethe-avatar.png" alt="Lethe Avatar">
+            </div>
+            <h1>Lethe</h1>
+            <p class="tagline">Your 24/7 Autonomous Executive Assistant</p>
+        </header>
+
+        <div class="intro">
+            Lethe is a fully autonomous AI assistant that operates continuously, maintains persistent memory across all conversations, and has full access to your machine. Communicate via Telegram, and watch as tasks get completed asynchronously while you focus on what matters.
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🧠</div>
+                <h3>Never Forgets</h3>
+                <p>Persistent memory powered by Letta ensures important details are retained across sessions. 3-tier memory architecture (working/episodic/archival) inspired by human cognition.</p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">🎯</div>
+                <h3>Proactively Helps</h3>
+                <p>Doesn't just wait for commands. Anticipates needs, follows up on commitments, and surfaces relevant information at the right time.</p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">📈</div>
+                <h3>Learns Continuously</h3>
+                <p>Improves its knowledge and adapts to your preferences over time. Self-modifying memory blocks allow the agent to evolve based on experience.</p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">🙋</div>
+                <h3>Feels Like a Colleague</h3>
+                <p>Anthropomorphic presence with consistent personality and expertise. Works alongside you as a trusted team member.</p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3>Operates 24/7</h3>
+                <p>Always available, processes tasks asynchronously in the background. Periodic heartbeats maintain continuity and proactivity.</p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">💰</div>
+                <h3>Token Efficient</h3>
+                <p>3-5x cheaper than alternatives. Selective memory loading, accessibility-tree browsing, and proactive compaction minimize API costs.</p>
+            </div>
+        </div>
+
+        <div class="warning">
+            <h3>⚠️ No Sandboxing</h3>
+            <p>Lethe has unrestricted access to your system with the same rights as the user running it. It can read, write, and delete any files you can access, execute any commands, and browse the web. Only run Lethe on systems where you trust the agent with full access.</p>
+        </div>
+
+        <div class="cta">
+            <a href="https://github.com/atemerev/lethe" class="cta-button">Get Started on GitHub</a>
+        </div>
+
+        <footer>
+            <p>Built with <a href="https://www.letta.com">Letta</a> • Open Source • <a href="https://github.com/atemerev/lethe">MIT License</a></p>
+        </footer>
+    </div>
+</body>
+</html>
