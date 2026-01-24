@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lethe - Autonomous Executive Assistant</title>
+    <title>Lethe - Memory Architecture</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,28 +15,46 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #e0e0e0;
+            font-family: 'JetBrains Mono', monospace;
             background: #000000;
+            color: #00ff88;
             min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             padding: 2rem;
+            position: relative;
         }
 
-        header {
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .avatar-container {
             text-align: center;
-            padding: 4rem 0;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeIn 2s ease-in forwards;
         }
 
         .avatar {
-            max-width: 400px;
-            margin: 0 auto 2rem;
-            display: block;
+            max-width: 300px;
+            margin: 0 auto;
+            filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.3));
         }
 
         .avatar img {
@@ -42,211 +63,314 @@
             display: block;
         }
 
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #00d4ff 0%, #0096ff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .tagline {
+        .system-name {
+            margin-top: 1rem;
             font-size: 1.5rem;
-            color: #8bb4d0;
-            margin-bottom: 3rem;
+            font-weight: 300;
+            letter-spacing: 0.5em;
+            color: #00ff88;
+            opacity: 0.7;
         }
 
-        .intro {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto 4rem;
-            font-size: 1.2rem;
-            color: #b0c4d4;
-            line-height: 1.8;
-        }
-
-        .features {
+        .blocks-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 4rem 0;
+            gap: 1.5rem;
+            margin-top: 2rem;
         }
 
-        .feature {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 2rem;
-            border-radius: 12px;
-            border: 1px solid rgba(0, 200, 255, 0.2);
-            transition: transform 0.3s ease, border-color 0.3s ease;
-        }
-
-        .feature:hover {
-            transform: translateY(-5px);
-            border-color: rgba(0, 200, 255, 0.5);
-        }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature h3 {
-            color: #00d4ff;
-            margin-bottom: 0.5rem;
-            font-size: 1.3rem;
-        }
-
-        .feature p {
-            color: #a0b4c4;
-        }
-
-        .cta {
-            text-align: center;
-            margin: 4rem 0;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 1rem 3rem;
-            background: linear-gradient(135deg, #00d4ff 0%, #0096ff 100%);
-            color: #0a0e27;
-            text-decoration: none;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0, 150, 255, 0.3);
-        }
-
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 30px rgba(0, 150, 255, 0.5);
-        }
-
-        .warning {
-            background: rgba(255, 100, 100, 0.1);
-            border: 1px solid rgba(255, 100, 100, 0.3);
+        .memory-block {
+            background: rgba(0, 255, 136, 0.02);
+            border: 1px solid rgba(0, 255, 136, 0.2);
             padding: 1.5rem;
-            border-radius: 8px;
-            margin: 3rem auto;
-            max-width: 800px;
+            opacity: 0;
+            transform: translateY(20px);
+            position: relative;
+            font-size: 0.85rem;
         }
 
-        .warning h3 {
-            color: #ff6b6b;
+        .memory-block.spawning {
+            animation: blockSpawn 0.8s ease-out forwards;
+            border-color: rgba(0, 255, 136, 0.6);
+        }
+
+        .block-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+            font-size: 0.7rem;
+            opacity: 0.5;
+        }
+
+        .block-meta {
+            color: #00ff88;
+        }
+
+        .block-id {
+            color: rgba(0, 255, 136, 0.4);
+        }
+
+        .block-title {
+            font-size: 1rem;
             margin-bottom: 0.5rem;
+            color: #00ff88;
+            font-weight: 500;
         }
 
-        .warning p {
-            color: #ffb3b3;
-            font-size: 0.95rem;
+        .block-content {
+            color: rgba(0, 255, 136, 0.6);
+            line-height: 1.6;
+            font-weight: 300;
         }
 
-        footer {
+        .block-links {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 255, 136, 0.1);
+            font-size: 0.7rem;
+            color: rgba(0, 255, 136, 0.4);
+        }
+
+        .footer-info {
             text-align: center;
-            padding: 3rem 0;
-            color: #6b8090;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
             margin-top: 4rem;
+            padding: 2rem 0;
+            border-top: 1px solid rgba(0, 255, 136, 0.1);
+            opacity: 0;
+            animation: fadeIn 2s ease-in 8s forwards;
         }
 
-        footer a {
-            color: #00d4ff;
+        .footer-info a {
+            color: #00ff88;
             text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s;
         }
 
-        footer a:hover {
-            text-decoration: underline;
+        .footer-info a:hover {
+            border-bottom-color: #00ff88;
+        }
+
+        .status-line {
+            position: fixed;
+            bottom: 1rem;
+            left: 1rem;
+            font-size: 0.7rem;
+            color: rgba(0, 255, 136, 0.3);
+            font-weight: 300;
+            z-index: 3;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes blockSpawn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            50% {
+                border-color: rgba(0, 255, 136, 0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                border-color: rgba(0, 255, 136, 0.2);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 1;
+            }
         }
 
         @media (max-width: 768px) {
             .avatar {
-                max-width: 250px;
+                max-width: 200px;
             }
 
-            h1 {
-                font-size: 2rem;
-            }
-
-            .tagline {
-                font-size: 1.2rem;
-            }
-
-            .intro {
-                font-size: 1rem;
-            }
-
-            .features {
+            .blocks-container {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
+    <canvas id="canvas"></canvas>
+    
+    <div class="content">
+        <div class="avatar-container">
             <div class="avatar">
-                <img src="lethe-avatar.png" alt="Lethe Avatar">
+                <img src="lethe-avatar.png" alt="Lethe">
             </div>
-            <h1>Lethe</h1>
-            <p class="tagline">Your 24/7 Autonomous Executive Assistant</p>
-        </header>
-
-        <div class="intro">
-            Lethe is a fully autonomous AI assistant that operates continuously, maintains persistent memory across all conversations, and has full access to your machine. Communicate via Telegram, and watch as tasks get completed asynchronously while you focus on what matters.
+            <div class="system-name">LETHE</div>
         </div>
 
-        <div class="features">
-            <div class="feature">
-                <div class="feature-icon">🧠</div>
-                <h3>Never Forgets</h3>
-                <p>Persistent memory powered by Letta ensures important details are retained across sessions. 3-tier memory architecture (working/episodic/archival) inspired by human cognition.</p>
-            </div>
+        <div class="blocks-container" id="blocks"></div>
 
-            <div class="feature">
-                <div class="feature-icon">🎯</div>
-                <h3>Proactively Helps</h3>
-                <p>Doesn't just wait for commands. Anticipates needs, follows up on commitments, and surfaces relevant information at the right time.</p>
-            </div>
-
-            <div class="feature">
-                <div class="feature-icon">📈</div>
-                <h3>Learns Continuously</h3>
-                <p>Improves its knowledge and adapts to your preferences over time. Self-modifying memory blocks allow the agent to evolve based on experience.</p>
-            </div>
-
-            <div class="feature">
-                <div class="feature-icon">🙋</div>
-                <h3>Feels Like a Colleague</h3>
-                <p>Anthropomorphic presence with consistent personality and expertise. Works alongside you as a trusted team member.</p>
-            </div>
-
-            <div class="feature">
-                <div class="feature-icon">⚡</div>
-                <h3>Operates 24/7</h3>
-                <p>Always available, processes tasks asynchronously in the background. Periodic heartbeats maintain continuity and proactivity.</p>
-            </div>
-
-            <div class="feature">
-                <div class="feature-icon">💰</div>
-                <h3>Token Efficient</h3>
-                <p>3-5x cheaper than alternatives. Selective memory loading, accessibility-tree browsing, and proactive compaction minimize API costs.</p>
-            </div>
+        <div class="footer-info">
+            <p>// autonomous executive assistant</p>
+            <p style="margin-top: 0.5rem;">
+                <a href="https://github.com/atemerev/lethe" target="_blank">github.com/atemerev/lethe</a>
+            </p>
         </div>
-
-        <div class="warning">
-            <h3>⚠️ No Sandboxing</h3>
-            <p>Lethe has unrestricted access to your system with the same rights as the user running it. It can read, write, and delete any files you can access, execute any commands, and browse the web. Only run Lethe on systems where you trust the agent with full access.</p>
-        </div>
-
-        <div class="cta">
-            <a href="https://github.com/atemerev/lethe" class="cta-button">Get Started on GitHub</a>
-        </div>
-
-        <footer>
-            <p>Built with <a href="https://www.letta.com">Letta</a> • Open Source • <a href="https://github.com/atemerev/lethe">MIT License</a></p>
-        </footer>
     </div>
+
+    <div class="status-line" id="status">initializing...</div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const blocksContainer = document.getElementById('blocks');
+        const statusLine = document.getElementById('status');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        const blocks = [
+            {
+                title: 'core.memory',
+                content: 'Persistent memory across all sessions. Nothing is forgotten. Everything connects.',
+                meta: { agent: 1, iteration: 3 }
+            },
+            {
+                title: 'autonomy.engine',
+                content: 'Operates continuously. Asynchronous task processing. No prompts required.',
+                meta: { agent: 2, iteration: 7 },
+                parent: 0
+            },
+            {
+                title: 'system.access',
+                content: 'Full filesystem permissions. Command execution. Web automation. Unrestricted.',
+                meta: { agent: 3, iteration: 12 },
+                parent: 1
+            },
+            {
+                title: 'learning.protocol',
+                content: 'Self-modification enabled. Adapts to patterns. Improves continuously.',
+                meta: { agent: 1, iteration: 8 },
+                parent: 0
+            },
+            {
+                title: 'proactive.monitoring',
+                content: 'Anticipates needs. Surfaces relevant information. Acts before being asked.',
+                meta: { agent: 4, iteration: 5 },
+                parent: 1
+            },
+            {
+                title: 'token.optimization',
+                content: 'Selective memory loading. Accessibility-tree browsing. 3-5x cost reduction.',
+                meta: { agent: 2, iteration: 15 },
+                parent: 3
+            }
+        ];
+
+        const connections = [];
+        const blockElements = [];
+
+        function drawConnections() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = 'rgba(0, 255, 136, 0.15)';
+            ctx.lineWidth = 1;
+
+            connections.forEach(conn => {
+                const from = blockElements[conn.from];
+                const to = blockElements[conn.to];
+
+                if (from && to) {
+                    const fromRect = from.getBoundingClientRect();
+                    const toRect = to.getBoundingClientRect();
+
+                    const x1 = fromRect.left + fromRect.width / 2;
+                    const y1 = fromRect.bottom;
+                    const x2 = toRect.left + toRect.width / 2;
+                    const y2 = toRect.top;
+
+                    ctx.beginPath();
+                    ctx.moveTo(x1, y1);
+                    
+                    // Bezier curve for organic feel
+                    const cp1y = y1 + (y2 - y1) * 0.3;
+                    const cp2y = y2 - (y2 - y1) * 0.3;
+                    ctx.bezierCurveTo(x1, cp1y, x2, cp2y, x2, y2);
+                    
+                    ctx.stroke();
+                }
+            });
+
+            requestAnimationFrame(drawConnections);
+        }
+
+        function createBlock(blockData, index) {
+            const block = document.createElement('div');
+            block.className = 'memory-block';
+            
+            const agentNum = blockData.meta.agent;
+            const iterNum = blockData.meta.iteration;
+            const blockId = `0x${Math.random().toString(16).substr(2, 8)}`;
+
+            block.innerHTML = `
+                <div class="block-header">
+                    <span class="block-meta">agent_${agentNum} / iter_${iterNum.toString().padStart(2, '0')}</span>
+                    <span class="block-id">${blockId}</span>
+                </div>
+                <div class="block-title">${blockData.title}</div>
+                <div class="block-content">${blockData.content}</div>
+                ${blockData.parent !== undefined ? `<div class="block-links">↳ spawned_by: ${blocks[blockData.parent].title}</div>` : ''}
+            `;
+
+            blocksContainer.appendChild(block);
+            blockElements[index] = block;
+
+            setTimeout(() => {
+                block.classList.add('spawning');
+            }, 50);
+
+            if (blockData.parent !== undefined) {
+                connections.push({
+                    from: blockData.parent,
+                    to: index
+                });
+            }
+
+            // Update status
+            statusLine.textContent = `memory_block_${index + 1} initialized // agent_${agentNum} // ${new Date().toISOString().split('T')[1].split('.')[0]}`;
+        }
+
+        function initialize() {
+            let delay = 2000; // Start after avatar appears
+
+            blocks.forEach((blockData, index) => {
+                setTimeout(() => {
+                    createBlock(blockData, index);
+                }, delay);
+                delay += 800 + Math.random() * 400; // Randomized timing
+            });
+
+            setTimeout(() => {
+                statusLine.textContent = 'system_ready // awaiting_input';
+                statusLine.style.animation = 'pulse 2s infinite';
+            }, delay + 1000);
+
+            drawConnections();
+        }
+
+        // Start after a brief moment
+        setTimeout(initialize, 1000);
+    </script>
 </body>
 </html>
