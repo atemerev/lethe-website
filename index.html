@@ -17,7 +17,7 @@
         body {
             font-family: 'JetBrains Mono', monospace;
             background: #000000;
-            color: #00ff88;
+            color: #2adce2;
             min-height: 100vh;
             overflow-x: hidden;
             display: flex;
@@ -54,7 +54,6 @@
         .avatar {
             max-width: 300px;
             margin: 0 auto;
-            filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.3));
         }
 
         .avatar img {
@@ -68,7 +67,7 @@
             font-size: 1.5rem;
             font-weight: 300;
             letter-spacing: 0.5em;
-            color: #00ff88;
+            color: #2adce2;
             opacity: 0.7;
         }
 
@@ -80,8 +79,8 @@
         }
 
         .memory-block {
-            background: rgba(0, 255, 136, 0.02);
-            border: 1px solid rgba(0, 255, 136, 0.2);
+            background: rgba(42, 220, 226, 0.02);
+            border: 1px solid rgba(42, 220, 226, 0.2);
             padding: 1.5rem;
             opacity: 0;
             transform: translateY(20px);
@@ -91,7 +90,7 @@
 
         .memory-block.spawning {
             animation: blockSpawn 0.8s ease-out forwards;
-            border-color: rgba(0, 255, 136, 0.6);
+            border-color: rgba(42, 220, 226, 0.6);
         }
 
         .block-header {
@@ -99,28 +98,28 @@
             justify-content: space-between;
             margin-bottom: 0.8rem;
             padding-bottom: 0.5rem;
-            border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+            border-bottom: 1px solid rgba(42, 220, 226, 0.1);
             font-size: 0.7rem;
             opacity: 0.5;
         }
 
         .block-meta {
-            color: #00ff88;
+            color: #2adce2;
         }
 
         .block-id {
-            color: rgba(0, 255, 136, 0.4);
+            color: rgba(42, 220, 226, 0.4);
         }
 
         .block-title {
             font-size: 1rem;
             margin-bottom: 0.5rem;
-            color: #00ff88;
+            color: #2adce2;
             font-weight: 500;
         }
 
         .block-content {
-            color: rgba(0, 255, 136, 0.6);
+            color: rgba(42, 220, 226, 0.6);
             line-height: 1.6;
             font-weight: 300;
         }
@@ -128,29 +127,29 @@
         .block-links {
             margin-top: 1rem;
             padding-top: 1rem;
-            border-top: 1px solid rgba(0, 255, 136, 0.1);
+            border-top: 1px solid rgba(42, 220, 226, 0.1);
             font-size: 0.7rem;
-            color: rgba(0, 255, 136, 0.4);
+            color: rgba(42, 220, 226, 0.4);
         }
 
         .footer-info {
             text-align: center;
             margin-top: 4rem;
             padding: 2rem 0;
-            border-top: 1px solid rgba(0, 255, 136, 0.1);
+            border-top: 1px solid rgba(42, 220, 226, 0.1);
             opacity: 0;
             animation: fadeIn 2s ease-in 8s forwards;
         }
 
         .footer-info a {
-            color: #00ff88;
+            color: #2adce2;
             text-decoration: none;
             border-bottom: 1px solid transparent;
             transition: border-color 0.3s;
         }
 
         .footer-info a:hover {
-            border-bottom-color: #00ff88;
+            border-bottom-color: #2adce2;
         }
 
         .status-line {
@@ -158,7 +157,7 @@
             bottom: 1rem;
             left: 1rem;
             font-size: 0.7rem;
-            color: rgba(0, 255, 136, 0.3);
+            color: rgba(42, 220, 226, 0.3);
             font-weight: 300;
             z-index: 3;
         }
@@ -175,12 +174,12 @@
                 transform: translateY(20px) scale(0.95);
             }
             50% {
-                border-color: rgba(0, 255, 136, 0.8);
+                border-color: rgba(42, 220, 226, 0.8);
             }
             100% {
                 opacity: 1;
                 transform: translateY(0) scale(1);
-                border-color: rgba(0, 255, 136, 0.2);
+                border-color: rgba(42, 220, 226, 0.2);
             }
         }
 
@@ -284,7 +283,7 @@
 
         function drawConnections() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.strokeStyle = 'rgba(0, 255, 136, 0.15)';
+            ctx.strokeStyle = 'rgba(42, 220, 226, 0.15)';
             ctx.lineWidth = 1;
 
             connections.forEach(conn => {
