@@ -403,6 +403,64 @@
             doFlicker();
         }
         
+        // Dynamic block internals - update content without resizing
+        function animateBlockInternals() {
+            const allBlocks = document.querySelectorAll('.memory-block');
+            
+            allBlocks.forEach((block, idx) => {
+                if (Math.random() < 0.3) { // 30% chance per cycle
+                    const metaEl = block.querySelector('.block-meta');
+                    const idEl = block.querySelector('.block-id');
+                    const contentEl = block.querySelector('.block-content');
+                    
+                    // Update iteration number
+                    if (metaEl && Math.random() < 0.5) {
+                        const match = metaEl.textContent.match(/iter_(\d+)/);
+                        if (match) {
+                            const currentIter = parseInt(match[1]);
+                            const newIter = currentIter + Math.floor(Math.random() * 3);
+                            metaEl.textContent = metaEl.textContent.replace(/iter_\d+/, `iter_${newIter.toString().padStart(2, '0')}`);
+                        }
+                    }
+                    
+                    // Flicker block ID occasionally
+                    if (idEl && Math.random() < 0.3) {
+                        const newId = `0x${Math.random().toString(16).substr(2, 8)}`;
+                        idEl.style.opacity = '0.3';
+                        setTimeout(() => {
+                            idEl.textContent = newId;
+                            idEl.style.opacity = '1';
+                        }, 50);
+                    }
+                    
+                    // Add/remove glyphs in content
+                    if (contentEl && Math.random() < 0.2) {
+                        const glyphs = ['◆', '▸', '●', '◉', '◊', '▹', '⬢', '⬡'];
+                        const glyph = glyphs[Math.floor(Math.random() * glyphs.length)];
+                        const words = contentEl.textContent.split(' ');
+                        
+                        // Insert glyph at random position, then remove it
+                        const insertPos = Math.floor(Math.random() * words.length);
+                        words[insertPos] = `${glyph} ${words[insertPos]}`;
+                        contentEl.textContent = words.join(' ');
+                        
+                        setTimeout(() => {
+                            contentEl.textContent = contentEl.textContent.replace(new RegExp(`${glyph}\\s+`, 'g'), '');
+                        }, 200 + Math.random() * 300);
+                    }
+                }
+                
+                // Random flicker effect
+                if (Math.random() < 0.15) {
+                    block.style.opacity = '0.7';
+                    setTimeout(() => { block.style.opacity = '1'; }, 50);
+                }
+            });
+        }
+        
+        // Run fast updates
+        setInterval(animateBlockInternals, 800 + Math.random() * 400);
+        
         // Start glitching after initialization
         setTimeout(glitchName, 8000 + Math.random() * 5000);
 
