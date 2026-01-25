@@ -372,19 +372,35 @@
         function glitchName() {
             const nameEl = document.querySelector('.system-name');
             const originalText = 'LETHE';
-            const greekText = 'Λήθη';
+            const greekText = 'ΛΉΘΗ';
+            const corruptedStates = ['L3TH3', 'ᛚᛖᚦᛖ', '⟨⟨⟨⟨⟨', 'ΛΉΘΗ', '£€₮H€'];
             
-            // Brief glitch sequence
-            nameEl.textContent = greekText;
-            nameEl.style.textShadow = '0 0 10px rgba(42, 220, 226, 0.8), 0 0 20px rgba(42, 220, 226, 0.5)';
+            let flickerCount = 2 + Math.floor(Math.random() * 4); // 2-5 flickers
+            let currentFlicker = 0;
             
-            setTimeout(() => {
-                nameEl.textContent = originalText;
-                nameEl.style.textShadow = '';
-            }, 150 + Math.random() * 200); // Brief flicker
+            function doFlicker() {
+                if (currentFlicker >= flickerCount) {
+                    nameEl.textContent = originalText;
+                    nameEl.style.textShadow = '';
+                    nameEl.style.letterSpacing = '';
+                    setTimeout(glitchName, 5000 + Math.random() * 15000);
+                    return;
+                }
+                
+                // Alternate between corrupted states and Greek
+                const text = currentFlicker % 2 === 0 ? 
+                    (Math.random() > 0.5 ? greekText : corruptedStates[Math.floor(Math.random() * corruptedStates.length)]) : 
+                    originalText;
+                    
+                nameEl.textContent = text;
+                nameEl.style.textShadow = '0 0 15px rgba(42, 220, 226, 1), 2px 2px 0 rgba(255, 0, 100, 0.5), -2px -2px 0 rgba(0, 255, 200, 0.5)';
+                nameEl.style.letterSpacing = `${-2 + Math.random() * 4}px`;
+                
+                currentFlicker++;
+                setTimeout(doFlicker, 40 + Math.random() * 80); // Rapid flickers
+            }
             
-            // Schedule next glitch randomly (5-20 seconds)
-            setTimeout(glitchName, 5000 + Math.random() * 15000);
+            doFlicker();
         }
         
         // Start glitching after initialization
