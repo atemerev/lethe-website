@@ -368,6 +368,28 @@
             drawConnections();
         }
 
+        // Name glitch effect
+        function glitchName() {
+            const nameEl = document.querySelector('.system-name');
+            const originalText = 'LETHE';
+            const greekText = 'Λήθη';
+            
+            // Brief glitch sequence
+            nameEl.textContent = greekText;
+            nameEl.style.textShadow = '0 0 10px rgba(42, 220, 226, 0.8), 0 0 20px rgba(42, 220, 226, 0.5)';
+            
+            setTimeout(() => {
+                nameEl.textContent = originalText;
+                nameEl.style.textShadow = '';
+            }, 150 + Math.random() * 200); // Brief flicker
+            
+            // Schedule next glitch randomly (5-20 seconds)
+            setTimeout(glitchName, 5000 + Math.random() * 15000);
+        }
+        
+        // Start glitching after initialization
+        setTimeout(glitchName, 8000 + Math.random() * 5000);
+
         // Start after a brief moment
         setTimeout(initialize, 1000);
     </script>
