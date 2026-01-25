@@ -403,63 +403,67 @@
             doFlicker();
         }
         
-        // Dynamic block internals - update content without resizing
-        function animateBlockInternals() {
+        // Fast ID updates - 2-3 times per second
+        function updateBlockIDs() {
             const allBlocks = document.querySelectorAll('.memory-block');
-            
-            allBlocks.forEach((block, idx) => {
-                if (Math.random() < 0.3) { // 30% chance per cycle
-                    const metaEl = block.querySelector('.block-meta');
+            allBlocks.forEach(block => {
+                if (Math.random() < 0.6) { // 60% chance each cycle
                     const idEl = block.querySelector('.block-id');
-                    const contentEl = block.querySelector('.block-content');
-                    
-                    // Update iteration number
-                    if (metaEl && Math.random() < 0.5) {
-                        const match = metaEl.textContent.match(/iter_(\d+)/);
-                        if (match) {
-                            const currentIter = parseInt(match[1]);
-                            const newIter = currentIter + Math.floor(Math.random() * 3);
-                            metaEl.textContent = metaEl.textContent.replace(/iter_\d+/, `iter_${newIter.toString().padStart(2, '0')}`);
-                        }
-                    }
-                    
-                    // Flicker block ID occasionally
-                    if (idEl && Math.random() < 0.3) {
+                    if (idEl) {
                         const newId = `0x${Math.random().toString(16).substr(2, 8)}`;
-                        idEl.style.opacity = '0.3';
-                        setTimeout(() => {
-                            idEl.textContent = newId;
-                            idEl.style.opacity = '1';
-                        }, 50);
+                        idEl.textContent = newId;
                     }
-                    
-                    // Add/remove glyphs in content
-                    if (contentEl && Math.random() < 0.2) {
-                        const glyphs = ['◆', '▸', '●', '◉', '◊', '▹', '⬢', '⬡'];
-                        const glyph = glyphs[Math.floor(Math.random() * glyphs.length)];
-                        const words = contentEl.textContent.split(' ');
-                        
-                        // Insert glyph at random position, then remove it
-                        const insertPos = Math.floor(Math.random() * words.length);
-                        words[insertPos] = `${glyph} ${words[insertPos]}`;
-                        contentEl.textContent = words.join(' ');
-                        
-                        setTimeout(() => {
-                            contentEl.textContent = contentEl.textContent.replace(new RegExp(`${glyph}\\s+`, 'g'), '');
-                        }, 200 + Math.random() * 300);
-                    }
-                }
-                
-                // Random flicker effect
-                if (Math.random() < 0.15) {
-                    block.style.opacity = '0.7';
-                    setTimeout(() => { block.style.opacity = '1'; }, 50);
                 }
             });
         }
         
-        // Run fast updates
-        setInterval(animateBlockInternals, 800 + Math.random() * 400);
+        // Update iteration numbers and agent numbers
+        function updateBlockMetadata() {
+            const allBlocks = document.querySelectorAll('.memory-block');
+            allBlocks.forEach((block, idx) => {
+                if (Math.random() < 0.4) { // 40% chance per cycle
+                    const metaEl = block.querySelector('.block-meta');
+                    
+                    if (metaEl) {
+                        // Update iteration number
+                        if (Math.random() < 0.7) {
+                            const match = metaEl.textContent.match(/iter_(\d+)/);
+                            if (match) {
+                                const currentIter = parseInt(match[1]);
+                                const newIter = currentIter + Math.floor(Math.random() * 4);
+                                metaEl.textContent = metaEl.textContent.replace(/iter_\d+/, `iter_${newIter.toString().padStart(2, '0')}`);
+                            }
+                        }
+                        
+                        // Occasionally update agent number
+                        if (Math.random() < 0.15) {
+                            const agentMatch = metaEl.textContent.match(/agent_(\d+)/);
+                            if (agentMatch) {
+                                const newAgent = 1 + Math.floor(Math.random() * 5);
+                                metaEl.textContent = metaEl.textContent.replace(/agent_\d+/, `agent_${newAgent}`);
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Update links
+        function updateBlockLinks() {
+            const linkEls = document.querySelectorAll('.block-links');
+            linkEls.forEach(linkEl => {
+                if (Math.random() < 0.3) {
+                    // Flicker the link
+                    linkEl.style.opacity = '0.5';
+                    setTimeout(() => { linkEl.style.opacity = '1'; }, 80);
+                }
+            });
+        }
+        
+        // Run updates at different rates
+        setInterval(updateBlockIDs, 350 + Math.random() * 150); // 2-3 times/sec
+        setInterval(updateBlockMetadata, 1200 + Math.random() * 600); // Slower for numbers
+        setInterval(updateBlockLinks, 900 + Math.random() * 400);
         
         // Start glitching after initialization
         setTimeout(glitchName, 8000 + Math.random() * 5000);
