@@ -381,27 +381,28 @@
             blocksContainer.appendChild(block);
             blockElements[index] = block;
 
-            setTimeout(() => {
-                block.classList.add('spawning');
-            }, 50);
-
             if (blockData.parent !== undefined) {
                 connections.push({
                     from: blockData.parent,
                     to: index
                 });
             }
-
-            // Update status
-            statusLine.textContent = `memory_block_${index + 1} initialized // agent_${agentNum} // ${new Date().toISOString().split('T')[1].split('.')[0]}`;
         }
 
         function initialize() {
-            let delay = 2000; // Start after avatar appears
+            // Create all blocks immediately to prevent reflow
+            blocks.forEach((blockData, index) => {
+                createBlock(blockData, index);
+            });
 
+            // Animate them in with staggered delays
+            let delay = 2000; // Start after avatar appears
             blocks.forEach((blockData, index) => {
                 setTimeout(() => {
-                    createBlock(blockData, index);
+                    blockElements[index].classList.add('spawning');
+                    // Update status
+                    const agentNum = blockData.meta.agent;
+                    statusLine.textContent = `memory_block_${index + 1} initialized // agent_${agentNum} // ${new Date().toISOString().split('T')[1].split('.')[0]}`;
                 }, delay);
                 delay += 800 + Math.random() * 400; // Randomized timing
             });
