@@ -144,14 +144,19 @@
         }
 
         .footer-info a {
-            color: #2adce2;
+            color: #000000;
+            background: #2adce2;
+            padding: 0.3rem 0.8rem;
             text-decoration: none;
-            border-bottom: 1px solid transparent;
-            transition: border-color 0.3s;
+            display: inline-block;
+            font-weight: 500;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px rgba(42, 220, 226, 0.5);
         }
 
         .footer-info a:hover {
-            border-bottom-color: #2adce2;
+            box-shadow: 0 0 20px rgba(42, 220, 226, 0.8);
+            transform: scale(1.05);
         }
 
         .status-line {
@@ -191,6 +196,69 @@
             }
             50% {
                 opacity: 1;
+            }
+        }
+
+        @keyframes glitchText {
+            0% {
+                transform: translate(0);
+                opacity: 1;
+            }
+            20% {
+                transform: translate(-2px, 2px);
+                opacity: 0.8;
+            }
+            40% {
+                transform: translate(2px, -2px);
+                opacity: 0.9;
+            }
+            60% {
+                transform: translate(-1px, -1px);
+                opacity: 0.85;
+            }
+            80% {
+                transform: translate(1px, 1px);
+                opacity: 0.95;
+            }
+            100% {
+                transform: translate(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes colorGlitch {
+            0% {
+                filter: none;
+            }
+            25% {
+                filter: hue-rotate(90deg) saturate(3);
+            }
+            50% {
+                filter: hue-rotate(-90deg) saturate(0.5);
+            }
+            75% {
+                filter: hue-rotate(180deg) saturate(2);
+            }
+            100% {
+                filter: none;
+            }
+        }
+
+        @keyframes borderGlitch {
+            0%, 100% {
+                border-color: rgba(42, 220, 226, 0.2);
+            }
+            20% {
+                border-color: rgba(255, 0, 100, 0.6);
+            }
+            40% {
+                border-color: rgba(0, 255, 200, 0.6);
+            }
+            60% {
+                border-color: rgba(255, 255, 0, 0.6);
+            }
+            80% {
+                border-color: rgba(42, 220, 226, 0.8);
             }
         }
 
@@ -450,12 +518,86 @@
             });
         }
         
+        // Glitch random block titles
+        function glitchBlockTitles() {
+            const titles = document.querySelectorAll('.block-title');
+            if (titles.length === 0) return;
+            
+            const randomTitle = titles[Math.floor(Math.random() * titles.length)];
+            randomTitle.style.animation = 'glitchText 0.3s ease-in-out';
+            randomTitle.style.textShadow = '2px 2px 0 rgba(255, 0, 100, 0.7), -2px -2px 0 rgba(0, 255, 200, 0.7)';
+            
+            setTimeout(() => {
+                randomTitle.style.animation = '';
+                randomTitle.style.textShadow = '';
+            }, 300);
+            
+            setTimeout(glitchBlockTitles, 2000 + Math.random() * 4000);
+        }
+        
+        // Glitch random blocks (border color flash)
+        function glitchBlocks() {
+            const blocks = document.querySelectorAll('.memory-block');
+            if (blocks.length === 0) return;
+            
+            const count = 1 + Math.floor(Math.random() * 3); // 1-3 blocks
+            for (let i = 0; i < count; i++) {
+                const randomBlock = blocks[Math.floor(Math.random() * blocks.length)];
+                randomBlock.style.animation = 'borderGlitch 0.4s ease-in-out';
+                
+                setTimeout(() => {
+                    randomBlock.style.animation = '';
+                }, 400);
+            }
+            
+            setTimeout(glitchBlocks, 3000 + Math.random() * 5000);
+        }
+        
+        // Occasional color glitch on entire container
+        function glitchColors() {
+            const container = document.querySelector('.blocks-container');
+            if (!container) return;
+            
+            container.style.animation = 'colorGlitch 0.6s ease-in-out';
+            
+            setTimeout(() => {
+                container.style.animation = '';
+            }, 600);
+            
+            setTimeout(glitchColors, 10000 + Math.random() * 15000);
+        }
+        
+        // Status line corruption
+        function glitchStatusLine() {
+            const status = document.getElementById('status');
+            if (!status) return;
+            
+            const originalText = status.textContent;
+            const corrupted = originalText.split('').map(c => 
+                Math.random() < 0.3 ? String.fromCharCode(33 + Math.floor(Math.random() * 94)) : c
+            ).join('');
+            
+            status.textContent = corrupted;
+            status.style.color = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.8)`;
+            
+            setTimeout(() => {
+                status.textContent = originalText;
+                status.style.color = 'rgba(42, 220, 226, 0.3)';
+            }, 100 + Math.random() * 200);
+            
+            setTimeout(glitchStatusLine, 5000 + Math.random() * 10000);
+        }
+        
         // Run updates at different rates
         setInterval(updateBlockIDs, 350 + Math.random() * 150); // 2-3 times/sec
         setInterval(updateBlockMetadata, 1200 + Math.random() * 600); // Slower for numbers
         
         // Start glitching after initialization
         setTimeout(glitchName, 8000 + Math.random() * 5000);
+        setTimeout(glitchBlockTitles, 10000 + Math.random() * 3000);
+        setTimeout(glitchBlocks, 12000 + Math.random() * 5000);
+        setTimeout(glitchColors, 15000 + Math.random() * 8000);
+        setTimeout(glitchStatusLine, 8000 + Math.random() * 4000);
 
         // Start after a brief moment
         setTimeout(initialize, 1000);
