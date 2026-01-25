@@ -429,7 +429,6 @@
                 if (currentFlicker >= flickerCount) {
                     nameEl.textContent = originalText;
                     nameEl.style.textShadow = '';
-                    nameEl.style.letterSpacing = '';
                     setTimeout(glitchName, 5000 + Math.random() * 15000);
                     return;
                 }
@@ -441,7 +440,6 @@
                     
                 nameEl.textContent = text;
                 nameEl.style.textShadow = '0 0 15px rgba(42, 220, 226, 1), 2px 2px 0 rgba(255, 0, 100, 0.5), -2px -2px 0 rgba(0, 255, 200, 0.5)';
-                nameEl.style.letterSpacing = `${-2 + Math.random() * 4}px`;
                 
                 currentFlicker++;
                 setTimeout(doFlicker, 40 + Math.random() * 80); // Rapid flickers
