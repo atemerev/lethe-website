@@ -448,22 +448,9 @@
             });
         }
         
-        // Update links
-        function updateBlockLinks() {
-            const linkEls = document.querySelectorAll('.block-links');
-            linkEls.forEach(linkEl => {
-                if (Math.random() < 0.3) {
-                    // Flicker the link
-                    linkEl.style.opacity = '0.5';
-                    setTimeout(() => { linkEl.style.opacity = '1'; }, 80);
-                }
-            });
-        }
-        
         // Run updates at different rates
         setInterval(updateBlockIDs, 350 + Math.random() * 150); // 2-3 times/sec
         setInterval(updateBlockMetadata, 1200 + Math.random() * 600); // Slower for numbers
-        setInterval(updateBlockLinks, 900 + Math.random() * 400);
         
         // Start glitching after initialization
         setTimeout(glitchName, 8000 + Math.random() * 5000);
