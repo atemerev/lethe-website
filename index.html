@@ -226,24 +226,6 @@
             }
         }
 
-        @keyframes colorGlitch {
-            0% {
-                filter: none;
-            }
-            25% {
-                filter: hue-rotate(90deg) saturate(3);
-            }
-            50% {
-                filter: hue-rotate(-90deg) saturate(0.5);
-            }
-            75% {
-                filter: hue-rotate(180deg) saturate(2);
-            }
-            100% {
-                filter: none;
-            }
-        }
-
         @keyframes borderGlitch {
             0%, 100% {
                 border-color: rgba(42, 220, 226, 0.2);
@@ -553,20 +535,6 @@
             setTimeout(glitchBlocks, 3000 + Math.random() * 5000);
         }
         
-        // Occasional color glitch on entire container
-        function glitchColors() {
-            const container = document.querySelector('.blocks-container');
-            if (!container) return;
-            
-            container.style.animation = 'colorGlitch 0.6s ease-in-out';
-            
-            setTimeout(() => {
-                container.style.animation = '';
-            }, 600);
-            
-            setTimeout(glitchColors, 10000 + Math.random() * 15000);
-        }
-        
         // Status line corruption
         function glitchStatusLine() {
             const status = document.getElementById('status');
@@ -596,7 +564,6 @@
         setTimeout(glitchName, 8000 + Math.random() * 5000);
         setTimeout(glitchBlockTitles, 10000 + Math.random() * 3000);
         setTimeout(glitchBlocks, 12000 + Math.random() * 5000);
-        setTimeout(glitchColors, 15000 + Math.random() * 8000);
         setTimeout(glitchStatusLine, 8000 + Math.random() * 4000);
 
         // Start after a brief moment
