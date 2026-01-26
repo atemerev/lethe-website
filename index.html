@@ -271,13 +271,11 @@
         }
 
         .status-line {
-            position: fixed;
-            bottom: 1rem;
-            left: 1rem;
             font-size: 0.7rem;
             color: rgba(42, 220, 226, 0.3);
             font-weight: 300;
-            z-index: 3;
+            margin: 3rem 1rem 2rem 1rem;
+            text-align: left;
         }
 
         @keyframes fadeIn {
@@ -424,9 +422,9 @@ uv sync</code></pre>
         </div>
 
         <div class="blocks-container" id="blocks"></div>
+        
+        <div class="status-line" id="status">initializing...</div>
     </div>
-
-    <div class="status-line" id="status">initializing...</div>
 
     <script>
         const canvas = document.getElementById('canvas');
