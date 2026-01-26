@@ -132,6 +132,66 @@
             color: rgba(42, 220, 226, 0.4);
         }
 
+        .quickstart-section {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 2rem;
+            border: 1px solid rgba(42, 220, 226, 0.2);
+            background: rgba(42, 220, 226, 0.02);
+            opacity: 0;
+            animation: fadeIn 2s ease-in 3s forwards;
+        }
+
+        .quickstart-section h2 {
+            color: #2adce2;
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            letter-spacing: 0.2em;
+        }
+
+        .quickstart-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .quickstart-step {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            font-size: 2rem;
+            color: #2adce2;
+            font-weight: 300;
+            opacity: 0.5;
+            min-width: 60px;
+        }
+
+        .step-content h3 {
+            color: #2adce2;
+            font-size: 1.1rem;
+            font-weight: 400;
+            margin-bottom: 0.8rem;
+            letter-spacing: 0.1em;
+        }
+
+        .step-content pre {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(42, 220, 226, 0.2);
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .step-content code {
+            color: #2adce2;
+        }
+
         .footer-info {
             text-align: center;
             margin-top: 2rem;
@@ -265,6 +325,38 @@
             <p style="margin-top: 0.5rem;">
                 <a href="https://github.com/atemerev/lethe" target="_blank">github.com/atemerev/lethe</a>
             </p>
+        </div>
+
+        <div class="quickstart-section">
+            <h2>// quickstart</h2>
+            <div class="quickstart-content">
+                <div class="quickstart-step">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3>Install</h3>
+                        <pre><code>git clone https://github.com/atemerev/lethe.git
+cd lethe
+uv sync</code></pre>
+                    </div>
+                </div>
+                
+                <div class="quickstart-step">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3>Configure</h3>
+                        <pre><code>cp .env.example .env
+# Add your API keys to .env</code></pre>
+                    </div>
+                </div>
+                
+                <div class="quickstart-step">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3>Run</h3>
+                        <pre><code>uv run lethe</code></pre>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="blocks-container" id="blocks"></div>
