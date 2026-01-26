@@ -190,6 +190,35 @@
 
         .step-content code {
             color: #2adce2;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        @media (max-width: 768px) {
+            .quickstart-section {
+                margin: 2rem 1rem;
+                padding: 1.5rem;
+            }
+
+            .quickstart-step {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .step-number {
+                font-size: 1.5rem;
+                min-width: auto;
+            }
+
+            .step-content pre {
+                padding: 0.8rem;
+                font-size: 0.75rem;
+                overflow-x: auto;
+            }
+
+            .step-content h3 {
+                font-size: 1rem;
+            }
         }
 
         .footer-info {
@@ -330,6 +359,17 @@
         <div class="quickstart-section">
             <h2>// quickstart</h2>
             <div class="quickstart-content">
+                <div class="quickstart-step">
+                    <div class="step-number">00</div>
+                    <div class="step-content">
+                        <h3>Prerequisites</h3>
+                        <pre><code>• Python 3.11+
+• UV package manager
+• Letta API key
+• Telegram bot token</code></pre>
+                    </div>
+                </div>
+                
                 <div class="quickstart-step">
                     <div class="step-number">01</div>
                     <div class="step-content">
