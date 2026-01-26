@@ -204,6 +204,16 @@
             color: #2adce2;
         }
 
+        .prereq-list a {
+            color: #2adce2;
+            text-decoration: underline;
+        }
+
+        .prereq-list a:hover {
+            color: #fff;
+            text-shadow: 0 0 5px #2adce2;
+        }
+
         @media (max-width: 768px) {
             .quickstart-section {
                 margin: 2rem 1rem;
@@ -375,8 +385,8 @@
                         <h3>Prerequisites</h3>
                         <div class="prereq-list">
                             <div>• Python 3.11+</div>
-                            <div>• UV package manager</div>
-                            <div>• Letta API key</div>
+                            <div>• <a href="https://github.com/astral-sh/uv" target="_blank">UV package manager</a></div>
+                            <div>• <a href="https://www.letta.com" target="_blank">Letta API key</a></div>
                             <div>• Telegram bot token</div>
                         </div>
                     </div>
@@ -472,36 +482,8 @@ uv sync</code></pre>
         const blockElements = [];
 
         function drawConnections() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.strokeStyle = 'rgba(42, 220, 226, 0.15)';
-            ctx.lineWidth = 1;
-
-            connections.forEach(conn => {
-                const from = blockElements[conn.from];
-                const to = blockElements[conn.to];
-
-                if (from && to) {
-                    const fromRect = from.getBoundingClientRect();
-                    const toRect = to.getBoundingClientRect();
-
-                    const x1 = fromRect.left + fromRect.width / 2;
-                    const y1 = fromRect.bottom;
-                    const x2 = toRect.left + toRect.width / 2;
-                    const y2 = toRect.top;
-
-                    ctx.beginPath();
-                    ctx.moveTo(x1, y1);
-                    
-                    // Bezier curve for organic feel
-                    const cp1y = y1 + (y2 - y1) * 0.3;
-                    const cp2y = y2 - (y2 - y1) * 0.3;
-                    ctx.bezierCurveTo(x1, cp1y, x2, cp2y, x2, y2);
-                    
-                    ctx.stroke();
-                }
-            });
-
-            requestAnimationFrame(drawConnections);
+            // Connections disabled
+            // ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
 
         function createBlock(blockData, index) {
