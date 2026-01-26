@@ -194,6 +194,25 @@
             white-space: pre-wrap;
         }
 
+        .prereq-list {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(42, 220, 226, 0.2);
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .prereq-list a {
+            color: #2adce2;
+            text-decoration: underline;
+        }
+
+        .prereq-list a:hover {
+            color: #fff;
+            text-shadow: 0 0 5px #2adce2;
+        }
+
         @media (max-width: 768px) {
             .quickstart-section {
                 margin: 2rem 1rem;
@@ -363,10 +382,12 @@
                     <div class="step-number">00</div>
                     <div class="step-content">
                         <h3>Prerequisites</h3>
-                        <pre><code>• Python 3.11+
-• UV package manager
-• Letta API key
-• Telegram bot token</code></pre>
+                        <div class="prereq-list">
+                            <div>• Python 3.11+</div>
+                            <div>• <a href="https://github.com/astral-sh/uv" target="_blank">UV package manager</a></div>
+                            <div>• <a href="https://www.letta.com" target="_blank">Letta API key</a></div>
+                            <div>• Telegram bot token</div>
+                        </div>
                     </div>
                 </div>
                 
