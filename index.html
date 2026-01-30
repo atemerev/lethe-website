@@ -46,9 +46,7 @@
 
         .avatar-container {
             text-align: center;
-            margin-bottom: 3rem;
-            opacity: 0;
-            animation: fadeIn 2s ease-in forwards;
+            margin-bottom: 2rem;
         }
 
         .avatar {
@@ -71,6 +69,56 @@
             opacity: 0.7;
         }
 
+        .description-section {
+            max-width: 700px;
+            margin: 0 auto 2rem auto;
+            text-align: center;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: rgba(42, 220, 226, 0.7);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .features {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            text-align: left;
+        }
+
+        .feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 0.8rem 1rem;
+            background: rgba(42, 220, 226, 0.02);
+            border-left: 2px solid rgba(42, 220, 226, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            font-size: 0.85rem;
+            color: rgba(42, 220, 226, 0.6);
+            line-height: 1.5;
+        }
+
+        .feature-text a {
+            color: #2adce2;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(42, 220, 226, 0.3);
+        }
+
+        .feature-text a:hover {
+            border-bottom-color: #2adce2;
+        }
+
         .blocks-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -82,15 +130,8 @@
             background: rgba(42, 220, 226, 0.02);
             border: 1px solid rgba(42, 220, 226, 0.2);
             padding: 1.5rem;
-            opacity: 0;
-            transform: translateY(20px);
             position: relative;
             font-size: 0.85rem;
-        }
-
-        .memory-block.spawning {
-            animation: blockSpawn 0.8s ease-out forwards;
-            border-color: rgba(42, 220, 226, 0.6);
         }
 
         .block-header {
@@ -138,8 +179,6 @@
             padding: 2rem;
             border: 1px solid rgba(42, 220, 226, 0.2);
             background: rgba(42, 220, 226, 0.02);
-            opacity: 0;
-            animation: fadeIn 2s ease-in 3s forwards;
         }
 
         .quickstart-section h2 {
@@ -269,8 +308,6 @@
             padding: 1.5rem 0;
             border-top: 1px solid rgba(42, 220, 226, 0.1);
             border-bottom: 1px solid rgba(42, 220, 226, 0.1);
-            opacity: 0;
-            animation: fadeIn 2s ease-in 2.5s forwards;
         }
 
         .footer-info a {
@@ -386,6 +423,28 @@
                 <img src="lethe-avatar.png" alt="Lethe">
             </div>
             <div class="system-name">LETHE</div>
+        </div>
+
+        <div class="description-section">
+            <p class="tagline">24/7 AI assistant that never forgets</p>
+            <div class="features">
+                <div class="feature">
+                    <span class="feature-icon">🧠</span>
+                    <span class="feature-text">Persistent memory via <a href="https://letta.com" target="_blank">Letta</a> - learns your preferences, remembers context across sessions</span>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">⚡</span>
+                    <span class="feature-text">Full system access - filesystem, CLI, browser automation, background tasks</span>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">💬</span>
+                    <span class="feature-text">Telegram interface - chat naturally, send files, images, voice messages</span>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">🔄</span>
+                    <span class="feature-text">Proactive - heartbeats, reminders, follows up on tasks without prompting</span>
+                </div>
+            </div>
         </div>
 
         <div class="footer-info">
@@ -531,27 +590,13 @@
         }
 
         function initialize() {
-            // Create all blocks immediately to prevent reflow
+            // Create all blocks immediately
             blocks.forEach((blockData, index) => {
                 createBlock(blockData, index);
             });
 
-            // Animate them in with staggered delays
-            let delay = 2000; // Start after avatar appears
-            blocks.forEach((blockData, index) => {
-                setTimeout(() => {
-                    blockElements[index].classList.add('spawning');
-                    // Update status
-                    const agentNum = blockData.meta.agent;
-                    statusLine.textContent = `memory_block_${index + 1} initialized // agent_${agentNum} // ${new Date().toISOString().split('T')[1].split('.')[0]}`;
-                }, delay);
-                delay += 800 + Math.random() * 400; // Randomized timing
-            });
-
-            setTimeout(() => {
-                statusLine.textContent = 'system_ready // awaiting_input';
-                statusLine.style.animation = 'pulse 2s infinite';
-            }, delay + 1000);
+            statusLine.textContent = 'system_ready // awaiting_input';
+            statusLine.style.animation = 'pulse 2s infinite';
 
             drawConnections();
         }
@@ -708,14 +753,14 @@
         setInterval(updateBlockIDs, 350 + Math.random() * 150); // 2-3 times/sec
         setInterval(updateBlockMetadata, 1200 + Math.random() * 600); // Slower for numbers
         
-        // Start glitching after initialization
-        setTimeout(glitchName, 8000 + Math.random() * 5000);
-        setTimeout(glitchBlockTitles, 10000 + Math.random() * 3000);
-        setTimeout(glitchBlocks, 12000 + Math.random() * 5000);
-        setTimeout(glitchStatusLine, 8000 + Math.random() * 4000);
+        // Start glitching soon after load
+        setTimeout(glitchName, 2000 + Math.random() * 3000);
+        setTimeout(glitchBlockTitles, 3000 + Math.random() * 2000);
+        setTimeout(glitchBlocks, 4000 + Math.random() * 3000);
+        setTimeout(glitchStatusLine, 3000 + Math.random() * 2000);
 
-        // Start after a brief moment
-        setTimeout(initialize, 1000);
+        // Initialize immediately
+        initialize();
 
         // Copy code to clipboard
         function copyCode(element) {
