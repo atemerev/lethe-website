@@ -214,6 +214,25 @@
             text-shadow: 0 0 5px #2adce2;
         }
 
+        .install-note {
+            font-size: 0.75rem;
+            color: rgba(42, 220, 226, 0.4);
+            margin-top: 0.5rem;
+        }
+
+        .copyable {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .copyable:hover {
+            background: rgba(42, 220, 226, 0.1);
+        }
+
+        .copyable.copied {
+            background: rgba(42, 220, 226, 0.2);
+        }
+
         @media (max-width: 768px) {
             .quickstart-section {
                 margin: 2rem 1rem;
@@ -380,42 +399,38 @@
             <h2>// quickstart</h2>
             <div class="quickstart-content">
                 <div class="quickstart-step">
-                    <div class="step-number">00</div>
-                    <div class="step-content">
-                        <h3>Prerequisites</h3>
-                        <div class="prereq-list">
-                            <div>• Python 3.11+</div>
-                            <div>• <a href="https://github.com/astral-sh/uv" target="_blank">UV package manager</a></div>
-                            <div>• <a href="https://www.letta.com" target="_blank">Letta API key</a></div>
-                            <div>• Telegram bot token</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="quickstart-step">
                     <div class="step-number">01</div>
                     <div class="step-content">
-                        <h3>Install</h3>
-                        <pre><code>git clone https://github.com/atemerev/lethe.git
-cd lethe
-uv sync</code></pre>
+                        <h3>One-Line Install</h3>
+                        <pre><code class="copyable" onclick="copyCode(this)">curl -fsSL https://raw.githubusercontent.com/atemerev/lethe/main/install.sh | bash</code></pre>
+                        <div class="install-note">Prompts for Telegram token + Letta API key. Sets up auto-start service.</div>
                     </div>
                 </div>
                 
                 <div class="quickstart-step">
                     <div class="step-number">02</div>
                     <div class="step-content">
-                        <h3>Configure</h3>
-                        <pre><code>cp .env.example .env
-# Add your API keys to .env</code></pre>
+                        <h3>Message Your Bot</h3>
+                        <div class="prereq-list">
+                            Open Telegram and start chatting with your bot.
+                        </div>
                     </div>
                 </div>
                 
                 <div class="quickstart-step">
-                    <div class="step-number">03</div>
+                    <div class="step-number">--</div>
                     <div class="step-content">
-                        <h3>Run</h3>
-                        <pre><code>uv run lethe</code></pre>
+                        <h3>Safety-First Mode</h3>
+                        <pre><code class="copyable" onclick="copyCode(this)">curl -fsSL https://raw.githubusercontent.com/atemerev/lethe/main/install.sh | bash -s -- --contained</code></pre>
+                        <div class="install-note">Runs in Docker/Podman with isolated filesystem access.</div>
+                    </div>
+                </div>
+
+                <div class="quickstart-step">
+                    <div class="step-number">--</div>
+                    <div class="step-content">
+                        <h3>Uninstall</h3>
+                        <pre><code class="copyable" onclick="copyCode(this)">curl -fsSL https://raw.githubusercontent.com/atemerev/lethe/main/uninstall.sh | bash</code></pre>
                     </div>
                 </div>
             </div>
@@ -701,6 +716,20 @@ uv sync</code></pre>
 
         // Start after a brief moment
         setTimeout(initialize, 1000);
+
+        // Copy code to clipboard
+        function copyCode(element) {
+            const text = element.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                element.classList.add('copied');
+                const original = element.textContent;
+                element.textContent = '// copied!';
+                setTimeout(() => {
+                    element.classList.remove('copied');
+                    element.textContent = original;
+                }, 1500);
+            });
+        }
     </script>
 </body>
 </html>
