@@ -455,9 +455,9 @@
                 <div class="quickstart-step">
                     <div class="step-number">01</div>
                     <div class="step-content">
-                        <h3>One-Line Install</h3>
+                        <h3>Install (Safe Mode)</h3>
                         <pre><code class="copyable" onclick="copyCode(this)">curl -fsSL https://lethe.gg/install | bash</code></pre>
-                        <div class="install-note">Prompts for Telegram token + Letta API key. Sets up auto-start service.</div>
+                        <div class="install-note">Runs in Docker/Podman. Agent can only access ~/lethe/ directory.</div>
                     </div>
                 </div>
                 
@@ -474,9 +474,9 @@
                 <div class="quickstart-step">
                     <div class="step-number">--</div>
                     <div class="step-content">
-                        <h3>Safety-First Mode</h3>
-                        <pre><code class="copyable" onclick="copyCode(this)">curl -fsSL https://lethe.gg/install | bash -s -- --contained</code></pre>
-                        <div class="install-note">Runs in Docker/Podman with isolated filesystem access.</div>
+                        <h3>Full System Access</h3>
+                        <pre><code class="copyable" onclick="copyCode(this)">curl -fsSL https://lethe.gg/install | bash -s -- --unsafe</code></pre>
+                        <div class="install-note">Native install. Agent has full access to your machine.</div>
                     </div>
                 </div>
 
