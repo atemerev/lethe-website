@@ -259,6 +259,19 @@
             margin-top: 0.5rem;
         }
 
+        .prereq-intro {
+            color: rgba(42, 220, 226, 0.6);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .prereq-list code {
+            background: rgba(42, 220, 226, 0.1);
+            padding: 0.1rem 0.3rem;
+            font-size: 0.85em;
+        }
+
         .copyable {
             cursor: pointer;
             transition: background 0.2s;
@@ -450,33 +463,75 @@
         </div>
 
         <div class="quickstart-section">
-            <h2>// quickstart</h2>
+            <h2>// before you start</h2>
+            <div class="quickstart-content">
+                <p class="prereq-intro">You'll need three things. Get them ready before installing:</p>
+                
+                <div class="quickstart-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Telegram Bot Token</h3>
+                        <div class="prereq-list">
+                            Open Telegram, message <a href="https://t.me/BotFather" target="_blank">@BotFather</a>, send /newbot, follow the prompts. You'll get a token like <code>123456:ABC-xyz...</code>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quickstart-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Letta API Key</h3>
+                        <div class="prereq-list">
+                            Sign up at <a href="https://app.letta.com" target="_blank">app.letta.com</a> (free tier available). Go to Settings → API Keys → Create new key.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quickstart-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Your Telegram User ID</h3>
+                        <div class="prereq-list">
+                            Message <a href="https://t.me/userinfobot" target="_blank">@userinfobot</a> on Telegram. It replies with your ID (a number like <code>123456789</code>). This ensures only you can use your bot.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quickstart-section">
+            <h2>// install</h2>
             <div class="quickstart-content">
                 <div class="quickstart-step">
                     <div class="step-number">01</div>
                     <div class="step-content">
-                        <h3>Install (Safe Mode)</h3>
+                        <h3>Run the Installer</h3>
                         <pre><code class="copyable" onclick="copyCode(this)">curl -fsSL https://lethe.gg/install | bash</code></pre>
-                        <div class="install-note">Runs in Docker/Podman. Agent can only access ~/lethe/ directory.</div>
+                        <div class="install-note">Open Terminal (Mac) or any terminal on Linux. Paste this command and press Enter. The installer will ask for your tokens.</div>
                     </div>
                 </div>
                 
                 <div class="quickstart-step">
                     <div class="step-number">02</div>
                     <div class="step-content">
-                        <h3>Message Your Bot</h3>
+                        <h3>Start Chatting</h3>
                         <div class="prereq-list">
-                            Open Telegram and start chatting with your bot.
+                            Open Telegram and message your bot. Say hello!
                         </div>
                     </div>
                 </div>
-                
+            </div>
+        </div>
+
+        <div class="quickstart-section">
+            <h2>// options</h2>
+            <div class="quickstart-content">
                 <div class="quickstart-step">
                     <div class="step-number">--</div>
                     <div class="step-content">
                         <h3>Full System Access</h3>
                         <pre><code class="copyable" onclick="copyCode(this)">curl -fsSL https://lethe.gg/install | bash -s -- --unsafe</code></pre>
-                        <div class="install-note">Native install. Agent has full access to your machine.</div>
+                        <div class="install-note">By default, Lethe runs in a container and can only access ~/lethe/. Use --unsafe to give it full access to your machine (files, commands, everything).</div>
                     </div>
                 </div>
 
