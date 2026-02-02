@@ -208,6 +208,19 @@ prompt_model() {
     
     success "Main model: $SELECTED_MODEL"
     success "Aux model: $SELECTED_MODEL_AUX"
+    
+    # Optional: Custom API base URL
+    echo ""
+    echo -e "${BLUE}Custom API URL${NC} (for local/compatible providers like Ollama, vLLM, etc.):"
+    echo -e "  Leave empty to use default provider URL"
+    read -p "  Custom API base URL (or Enter to skip): " custom_api_base < /dev/tty
+    
+    if [ -n "$custom_api_base" ]; then
+        SELECTED_API_BASE="$custom_api_base"
+        success "API base: $SELECTED_API_BASE"
+    else
+        SELECTED_API_BASE=""
+    fi
 }
 
 prompt_api_key() {
@@ -319,6 +332,27 @@ install_dependencies() {
     fi
     success "git found"
     
+    # Install Node.js/npm if missing (needed for agent-browser)
+    if ! check_command npm; then
+        info "Installing Node.js..."
+        if [[ "$OS" == "mac" ]]; then
+            brew install node
+        elif check_command apt-get; then
+            maybe_sudo apt-get install -y nodejs npm
+        elif check_command dnf; then
+            maybe_sudo dnf install -y nodejs npm
+        fi
+    fi
+    
+    # Install agent-browser for browser automation
+    if ! check_command agent-browser; then
+        info "Installing agent-browser..."
+        npm install -g agent-browser 2>/dev/null || maybe_sudo npm install -g agent-browser
+        info "Installing browser dependencies..."
+        agent-browser install --with-deps 2>/dev/null || maybe_sudo agent-browser install --with-deps
+    fi
+    success "agent-browser found"
+    
     # Install uv
     if ! check_command uv; then
         info "Installing uv (Python package manager)..."
@@ -374,6 +408,7 @@ TELEGRAM_ALLOWED_USER_IDS=$TELEGRAM_USER_ID
 LLM_PROVIDER=$SELECTED_PROVIDER
 LLM_MODEL=$SELECTED_MODEL
 LLM_MODEL_AUX=$SELECTED_MODEL_AUX
+LLM_API_BASE=$SELECTED_API_BASE
 $api_key_line
 
 # Optional: Heartbeat interval (seconds, default 900 = 15 min)
@@ -546,6 +581,7 @@ TELEGRAM_ALLOWED_USER_IDS=$TELEGRAM_USER_ID
 LLM_PROVIDER=$SELECTED_PROVIDER
 LLM_MODEL=$SELECTED_MODEL
 LLM_MODEL_AUX=$SELECTED_MODEL_AUX
+LLM_API_BASE=$SELECTED_API_BASE
 $key_name=$API_KEY
 HEARTBEAT_ENABLED=true
 HIPPOCAMPUS_ENABLED=true
@@ -555,14 +591,27 @@ EOF
     $CONTAINER_CMD stop lethe 2>/dev/null || true
     $CONTAINER_CMD rm lethe 2>/dev/null || true
     
-    # Run container (--userns=keep-id maps container user to host user for file permissions)
-    $CONTAINER_CMD run -d \
-        --name lethe \
-        --restart unless-stopped \
-        --userns=keep-id \
-        --env-file "$CONFIG_DIR/container.env" \
-        -v "$WORKSPACE_DIR:/workspace:Z" \
-        lethe:latest
+    # Run container
+    # Podman: --userns=keep-id maps container user to host user for file permissions
+    # Docker: --user maps to host UID/GID directly
+    if [[ "$CONTAINER_CMD" == "podman" ]]; then
+        $CONTAINER_CMD run -d \
+            --name lethe \
+            --restart unless-stopped \
+            --userns=keep-id \
+            --env-file "$CONFIG_DIR/container.env" \
+            -v "$WORKSPACE_DIR:/workspace:Z" \
+            lethe:latest
+    else
+        # Docker - run as host user for file permissions
+        $CONTAINER_CMD run -d \
+            --name lethe \
+            --restart unless-stopped \
+            --user "$(id -u):$(id -g)" \
+            --env-file "$CONFIG_DIR/container.env" \
+            -v "$WORKSPACE_DIR:/workspace" \
+            lethe:latest
+    fi
     
     success "Container started"
     info "Workspace: $WORKSPACE_DIR"
