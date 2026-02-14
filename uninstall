@@ -4,7 +4,7 @@
 # Removes Lethe and all associated files
 #
 
-set -e
+set -euo pipefail
 
 # Colors
 RED='\033[0;31m'
@@ -132,11 +132,8 @@ fi
 echo ""
 success "Lethe has been uninstalled."
 echo ""
-echo "Preserved data:"
-echo "  $CONFIG_DIR  - API tokens and settings"
-echo "  $WORKSPACE_DIR   - Workspace (memory, projects, skills)"
-echo ""
-echo "To remove ALL data: rm -rf $CONFIG_DIR $WORKSPACE_DIR"
+echo "Your config is preserved at:"
+echo "  $CONFIG_DIR - API tokens and settings"
 echo ""
 echo "To reinstall:"
 echo "  curl -fsSL https://lethe.gg/install | bash"
