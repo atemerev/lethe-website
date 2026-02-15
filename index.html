@@ -450,8 +450,41 @@
                 Lethe runs locally on your machine and talks to you via Telegram. All your data stays on your computer - only LLM API calls leave your machine. It remembers everything across sessions.
             </p>
             <p class="description-text">
-                Set reminders, manage tasks, browse the web, run commands, and let it check in with you proactively. Runs safely in a container by default.
+                Cortex is the only user-facing actor. Background actors (DMN and Amygdala) and task subagents report into cortex over structured channels, so notifications stay useful instead of noisy.
             </p>
+        </div>
+
+        <div class="quickstart-section">
+            <h2>// architecture</h2>
+            <div class="quickstart-content">
+                <div class="quickstart-step">
+                    <div class="step-number">A1</div>
+                    <div class="step-content">
+                        <h3>Cortex (Principal)</h3>
+                        <div class="prereq-list">
+                            The only actor that talks to you on Telegram. Handles quick local tasks directly and delegates longer work.
+                        </div>
+                    </div>
+                </div>
+                <div class="quickstart-step">
+                    <div class="step-number">A2</div>
+                    <div class="step-content">
+                        <h3>Background Cognition</h3>
+                        <div class="prereq-list">
+                            DMN and Amygdala run in heartbeat rounds, surface meaningful insights, and escalate through cortex with cooldown-based anti-spam.
+                        </div>
+                    </div>
+                </div>
+                <div class="quickstart-step">
+                    <div class="step-number">A3</div>
+                    <div class="step-content">
+                        <h3>Structured Signaling</h3>
+                        <div class="prereq-list">
+                            Actor messages carry metadata channels (for example <code>task_update</code>, <code>user_notify</code>) instead of in-band control tags.
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="footer-info">
@@ -579,32 +612,32 @@
                 meta: { agent: 1, iteration: 3 }
             },
             {
-                title: 'autonomy.engine',
-                content: 'Operates continuously. Asynchronous task processing. No prompts required.',
+                title: 'cortex.principal',
+                content: 'Single user-facing executive actor. Routes work, keeps context, decides what reaches the user.',
                 meta: { agent: 2, iteration: 7 },
                 parent: 0
             },
             {
-                title: 'system.access',
-                content: 'Safe container by default. Full system access optional. Your choice.',
+                title: 'background.dmn',
+                content: 'Periodic deep/quick background rounds for planning, reminders, reflection, and proactive ideas.',
                 meta: { agent: 3, iteration: 12 },
                 parent: 1
             },
             {
-                title: 'learning.protocol',
-                content: 'Self-modification enabled. Adapts to patterns. Improves continuously.',
+                title: 'background.amygdala',
+                content: 'Fast emotional salience monitor. Escalates urgency patterns only when meaningful.',
                 meta: { agent: 1, iteration: 8 },
                 parent: 0
             },
             {
-                title: 'proactive.monitoring',
-                content: 'Anticipates needs. Surfaces relevant information. Acts before being asked.',
+                title: 'signal.channels',
+                content: 'Structured actor metadata channels (task_update, user_notify) replace fragile in-band tags.',
                 meta: { agent: 4, iteration: 5 },
                 parent: 1
             },
             {
-                title: 'token.optimization',
-                content: 'Selective memory loading. Accessibility-tree browsing. 3-5x cost reduction.',
+                title: 'notify.policy',
+                content: 'Background insights flow through cortex with cooldown + de-dup throttling to avoid user spam.',
                 meta: { agent: 2, iteration: 15 },
                 parent: 3
             }
