@@ -3,869 +3,462 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lethe - Autonomous Executive Assistant</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>Lethe — The AI That Remembers You</title>
+    <meta name="description" content="An AI assistant with persistent memory that runs locally on your machine. Open source. Private. Yours.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0a0a0f;
+            --bg-subtle: #12121a;
+            --bg-card: #16161f;
+            --border: #1e1e2e;
+            --border-hover: #2a2a3a;
+            --text: #e2e2e8;
+            --text-dim: #7a7a8c;
+            --text-dimmer: #4a4a5c;
+            --accent: #00d4aa;
+            --accent-dim: #00d4aa33;
+            --accent-glow: #00d4aa22;
+            --purple: #a78bfa;
+            --mono: 'SF Mono', 'Cascadia Code', 'Fira Code', 'JetBrains Mono', monospace;
+            --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
         }
+
+        html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'JetBrains Mono', monospace;
-            background: #000000;
-            color: #2adce2;
-            min-height: 100vh;
+            font-family: var(--sans);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 2rem;
-            position: relative;
         }
 
-        #canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        .container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+        section { padding: 80px 0; }
+
+        /* Nav */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            padding: 16px 0;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        nav .container { display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo {
+            font-family: var(--mono); font-size: 18px; font-weight: 700;
+            color: var(--accent); text-decoration: none; letter-spacing: 2px;
+        }
+        .nav-links { display: flex; gap: 28px; list-style: none; }
+        .nav-links a {
+            font-family: var(--mono); font-size: 13px; color: var(--text-dim);
+            text-decoration: none; transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--accent); }
+
+        /* Hero */
+        .hero { padding: 180px 0 100px; text-align: center; position: relative; }
+        .hero::before {
+            content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
             pointer-events: none;
-            z-index: 1;
         }
-
-        .content {
-            position: relative;
-            z-index: 2;
-            max-width: 1200px;
-            width: 100%;
+        .hero-tag {
+            font-family: var(--mono); font-size: 13px; color: var(--accent);
+            letter-spacing: 3px; text-transform: uppercase; margin-bottom: 24px; opacity: 0.8;
         }
-
-        .avatar-container {
-            text-align: center;
-            margin-bottom: 2rem;
+        .hero h1 {
+            font-size: clamp(36px, 6vw, 56px); font-weight: 700;
+            line-height: 1.15; margin-bottom: 24px; letter-spacing: -1px;
         }
-
-        .avatar {
-            max-width: 300px;
-            margin: 0 auto;
+        .hero h1 .dim { color: var(--text-dim); }
+        .hero-sub {
+            font-size: 18px; color: var(--text-dim); max-width: 520px;
+            margin: 0 auto 40px; line-height: 1.7;
         }
+        .hero-cta { display: inline-flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
 
-        .avatar img {
-            width: 100%;
-            height: auto;
-            display: block;
+        /* Buttons */
+        .btn {
+            font-family: var(--mono); font-size: 14px; padding: 12px 28px;
+            border-radius: 8px; text-decoration: none; transition: all 0.2s; cursor: pointer; border: none;
         }
+        .btn-primary { background: var(--accent); color: var(--bg); font-weight: 600; }
+        .btn-primary:hover { background: #00e6b8; transform: translateY(-1px); box-shadow: 0 4px 20px var(--accent-dim); }
+        .btn-ghost { background: transparent; color: var(--text-dim); border: 1px solid var(--border); }
+        .btn-ghost:hover { border-color: var(--border-hover); color: var(--text); }
 
-        .system-name {
-            margin-top: 1rem;
-            font-size: 1.5rem;
-            font-weight: 300;
-            letter-spacing: 0.5em;
-            color: #2adce2;
-            opacity: 0.7;
+        /* Section headers */
+        .section-label {
+            font-family: var(--mono); font-size: 12px; color: var(--accent);
+            letter-spacing: 3px; text-transform: uppercase; margin-bottom: 16px;
         }
-
-        .description-section {
-            max-width: 700px;
-            margin: 0 auto 2rem auto;
-            text-align: center;
+        .section-title {
+            font-size: clamp(24px, 4vw, 36px); font-weight: 700;
+            margin-bottom: 16px; letter-spacing: -0.5px;
         }
+        .section-text { font-size: 16px; color: var(--text-dim); max-width: 600px; line-height: 1.8; }
 
-        .tagline {
-            font-size: 1.2rem;
-            color: #2adce2;
-            margin-bottom: 1.5rem;
-            font-weight: 400;
+        /* Scenarios */
+        .scenarios { border-top: 1px solid var(--border); }
+        .scenario-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 40px; }
+        .scenario {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 12px; padding: 28px; transition: border-color 0.2s;
         }
-
-        .description-text {
-            font-size: 0.95rem;
-            color: rgba(42, 220, 226, 0.6);
-            margin-bottom: 1rem;
-            line-height: 1.7;
-            font-weight: 300;
+        .scenario:hover { border-color: var(--border-hover); }
+        .scenario-time {
+            font-family: var(--mono); font-size: 11px; color: var(--accent);
+            margin-bottom: 12px; opacity: 0.7;
         }
-
-        .features {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            text-align: left;
+        .scenario-msg {
+            font-family: var(--mono); font-size: 14px; line-height: 1.7; color: var(--text);
         }
+        .scenario-msg .user { color: var(--purple); }
+        .scenario-msg .lethe { color: var(--accent); }
 
-        .feature {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            padding: 0.8rem 1rem;
-            background: rgba(42, 220, 226, 0.02);
-            border-left: 2px solid rgba(42, 220, 226, 0.3);
+        /* Architecture */
+        .architecture { border-top: 1px solid var(--border); }
+        .arch-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px; margin-top: 40px;
         }
-
-        .feature-icon {
-            font-size: 1.2rem;
-            flex-shrink: 0;
+        .arch-node {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 12px; padding: 24px; transition: border-color 0.2s;
         }
-
-        .feature-text {
-            font-size: 0.85rem;
-            color: rgba(42, 220, 226, 0.6);
-            line-height: 1.5;
+        .arch-node:hover { border-color: var(--border-hover); }
+        .arch-node-name {
+            font-family: var(--mono); font-size: 14px; font-weight: 600;
+            color: var(--accent); margin-bottom: 8px;
         }
+        .arch-node-desc { font-size: 14px; color: var(--text-dim); line-height: 1.6; }
 
-        .feature-text a {
-            color: #2adce2;
-            text-decoration: none;
-            border-bottom: 1px solid rgba(42, 220, 226, 0.3);
+        /* Terminal log */
+        .terminal-log {
+            margin-top: 40px; background: var(--bg-subtle); border: 1px solid var(--border);
+            border-radius: 12px; padding: 20px 24px;
+            font-family: var(--mono); font-size: 12px; line-height: 2;
+            overflow: hidden; max-height: 200px;
         }
+        .log-ts { color: var(--text-dimmer); }
+        .log-actor { color: var(--purple); }
+        .log-event { color: var(--text-dim); }
+        .log-ok { color: var(--accent); }
 
-        .feature-text a:hover {
-            border-bottom-color: #2adce2;
+        /* Principles */
+        .principles { border-top: 1px solid var(--border); }
+        .principle-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px; margin-top: 40px;
         }
+        .principle h3 { font-family: var(--mono); font-size: 15px; margin-bottom: 8px; }
+        .principle p { font-size: 14px; color: var(--text-dim); line-height: 1.7; }
 
-        .blocks-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
+        /* Install */
+        .install { border-top: 1px solid var(--border); }
+        .install-steps { margin-top: 40px; display: flex; flex-direction: column; gap: 24px; }
+        .install-step { display: flex; gap: 20px; align-items: flex-start; }
+        .step-num {
+            font-family: var(--mono); font-size: 13px; color: var(--accent);
+            background: var(--accent-dim); width: 32px; height: 32px;
+            border-radius: 8px; display: flex; align-items: center;
+            justify-content: center; flex-shrink: 0;
         }
-
-        .memory-block {
-            background: rgba(42, 220, 226, 0.02);
-            border: 1px solid rgba(42, 220, 226, 0.2);
-            padding: 1.5rem;
-            position: relative;
-            font-size: 0.85rem;
+        .step-content h3 { font-size: 16px; margin-bottom: 6px; }
+        .step-content p { font-size: 14px; color: var(--text-dim); line-height: 1.6; }
+        .code-block {
+            font-family: var(--mono); font-size: 13px; background: var(--bg-subtle);
+            border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px;
+            margin-top: 10px; color: var(--accent); position: relative; overflow-x: auto;
         }
-
-        .block-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.8rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid rgba(42, 220, 226, 0.1);
-            font-size: 0.7rem;
-            opacity: 0.5;
+        .code-block .copy-btn {
+            position: absolute; right: 10px; top: 10px;
+            font-family: var(--mono); font-size: 11px; background: var(--border);
+            border: none; color: var(--text-dim); padding: 4px 10px;
+            border-radius: 4px; cursor: pointer; transition: all 0.2s;
         }
-
-        .block-meta {
-            color: #2adce2;
+        .code-block .copy-btn:hover { background: var(--border-hover); color: var(--text); }
+        .prereqs {
+            margin-top: 32px; padding: 24px; background: var(--bg-card);
+            border: 1px solid var(--border); border-radius: 12px;
         }
+        .prereqs h3 { font-family: var(--mono); font-size: 14px; color: var(--text-dim); margin-bottom: 12px; }
+        .prereqs ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .prereqs li { font-size: 14px; color: var(--text-dim); padding-left: 18px; position: relative; }
+        .prereqs li::before { content: '→'; position: absolute; left: 0; color: var(--accent); opacity: 0.5; }
+        .prereqs a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-dim); }
+        .prereqs a:hover { border-color: var(--accent); }
 
-        .block-id {
-            color: rgba(42, 220, 226, 0.4);
+        /* Footer */
+        footer { border-top: 1px solid var(--border); padding: 40px 0; }
+        footer .container { display: flex; justify-content: space-between; align-items: center; }
+        .footer-left { font-family: var(--mono); font-size: 13px; color: var(--text-dimmer); }
+        .footer-links { display: flex; gap: 20px; }
+        .footer-links a {
+            font-family: var(--mono); font-size: 13px; color: var(--text-dim);
+            text-decoration: none; transition: color 0.2s;
         }
+        .footer-links a:hover { color: var(--accent); }
 
-        .block-title {
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-            color: #2adce2;
-            font-weight: 500;
-        }
-
-        .block-content {
-            color: rgba(42, 220, 226, 0.6);
-            line-height: 1.6;
-            font-weight: 300;
-        }
-
-        .block-links {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(42, 220, 226, 0.1);
-            font-size: 0.7rem;
-            color: rgba(42, 220, 226, 0.4);
-        }
-
-        .quickstart-section {
-            max-width: 800px;
-            margin: 3rem auto;
-            padding: 2rem;
-            border: 1px solid rgba(42, 220, 226, 0.2);
-            background: rgba(42, 220, 226, 0.02);
-        }
-
-        .quickstart-section h2 {
-            color: #2adce2;
-            font-size: 1.5rem;
-            font-weight: 300;
-            margin-bottom: 2rem;
-            letter-spacing: 0.2em;
-        }
-
-        .quickstart-content {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        .quickstart-step {
-            display: flex;
-            gap: 1.5rem;
-            align-items: flex-start;
-        }
-
-        .step-number {
-            font-size: 2rem;
-            color: #2adce2;
-            font-weight: 300;
-            opacity: 0.5;
-            min-width: 60px;
-        }
-
-        .step-content h3 {
-            color: #2adce2;
-            font-size: 1.1rem;
-            font-weight: 400;
-            margin-bottom: 0.8rem;
-            letter-spacing: 0.1em;
-        }
-
-        .step-content pre {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(42, 220, 226, 0.2);
-            padding: 1rem;
-            overflow-x: auto;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-
-        .step-content code {
-            color: #2adce2;
-            word-wrap: break-word;
-            white-space: pre-wrap;
-        }
-
-        .prereq-list {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(42, 220, 226, 0.2);
-            padding: 1rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            color: #2adce2;
-        }
-
-        .prereq-list a {
-            color: #2adce2;
-            text-decoration: underline;
-        }
-
-        .prereq-list a:hover {
-            color: #fff;
-            text-shadow: 0 0 5px #2adce2;
-        }
-
-        .install-note {
-            font-size: 0.75rem;
-            color: rgba(42, 220, 226, 0.4);
-            margin-top: 0.5rem;
-        }
-
-        .prereq-intro {
-            color: rgba(42, 220, 226, 0.6);
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-
-        .prereq-list code {
-            background: rgba(42, 220, 226, 0.1);
-            padding: 0.1rem 0.3rem;
-            font-size: 0.85em;
-        }
-
-        .copyable {
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .copyable:hover {
-            background: rgba(42, 220, 226, 0.1);
-        }
-
-        .copyable.copied {
-            background: rgba(42, 220, 226, 0.2);
-        }
-
-        @media (max-width: 768px) {
-            .quickstart-section {
-                margin: 2rem 1rem;
-                padding: 1.5rem;
-            }
-
-            .quickstart-step {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .step-number {
-                font-size: 1.5rem;
-                min-width: auto;
-            }
-
-            .step-content pre {
-                padding: 0.8rem;
-                font-size: 0.75rem;
-                overflow-x: auto;
-                white-space: pre-wrap;
-                word-break: break-all;
-            }
-
-            .step-content h3 {
-                font-size: 1rem;
-            }
-        }
-
-        .footer-info {
-            text-align: center;
-            margin-top: 2rem;
-            margin-bottom: 2rem;
-            padding: 1.5rem 0;
-        }
-
-        .footer-info a {
-            color: #000000;
-            background: #2adce2;
-            padding: 0.3rem 0.8rem;
-            text-decoration: none;
-            display: inline-block;
-            font-weight: 500;
-            transition: all 0.3s;
-            box-shadow: 0 0 10px rgba(42, 220, 226, 0.5);
-        }
-
-        .footer-info a:hover {
-            box-shadow: 0 0 20px rgba(42, 220, 226, 0.8);
-            transform: scale(1.05);
-        }
-
-        .status-line {
-            font-size: 0.7rem;
-            color: rgba(42, 220, 226, 0.3);
-            font-weight: 300;
-            margin: 3rem 1rem 2rem 1rem;
-            text-align: left;
-        }
-
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes blockSpawn {
-            0% {
-                opacity: 0;
-                transform: translateY(20px) scale(0.95);
-            }
-            50% {
-                border-color: rgba(42, 220, 226, 0.8);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-                border-color: rgba(42, 220, 226, 0.2);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 0.3;
-            }
-            50% {
-                opacity: 1;
-            }
-        }
-
-        @keyframes glitchText {
-            0% {
-                transform: translate(0);
-            }
-            20% {
-                transform: translate(-2px, 2px);
-            }
-            40% {
-                transform: translate(2px, -2px);
-            }
-            60% {
-                transform: translate(-1px, -1px);
-            }
-            80% {
-                transform: translate(1px, 1px);
-            }
-            100% {
-                transform: translate(0);
-            }
-        }
-
-        @keyframes borderGlitch {
-            0%, 100% {
-                border-color: rgba(42, 220, 226, 0.2);
-            }
-            20% {
-                border-color: rgba(255, 0, 100, 0.6);
-            }
-            40% {
-                border-color: rgba(0, 255, 200, 0.6);
-            }
-            60% {
-                border-color: rgba(255, 255, 0, 0.6);
-            }
-            80% {
-                border-color: rgba(42, 220, 226, 0.8);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .avatar {
-                max-width: 200px;
-            }
-
-            .blocks-container {
-                grid-template-columns: 1fr;
-            }
+        /* Responsive */
+        @media (max-width: 640px) {
+            section { padding: 60px 0; }
+            .hero { padding: 140px 0 80px; }
+            .nav-links { gap: 16px; }
+            .nav-links a { font-size: 12px; }
+            .install-step { flex-direction: column; gap: 12px; }
+            footer .container { flex-direction: column; gap: 16px; text-align: center; }
+            .scenario { padding: 20px; }
         }
     </style>
 </head>
 <body>
-    <canvas id="canvas"></canvas>
-    
-    <div class="content">
-        <div class="avatar-container">
-            <div class="avatar">
-                <img src="lethe-avatar.png" alt="Lethe">
-            </div>
-            <div class="system-name">LETHE</div>
-        </div>
 
-        <div class="description-section">
-            <p class="tagline">Your AI assistant that actually remembers you</p>
-            <p class="description-text">
-                Lethe runs locally on your machine and talks to you via Telegram. All your data stays on your computer - only LLM API calls leave your machine. It remembers everything across sessions.
-            </p>
-            <p class="description-text">
-                Cortex is the only user-facing actor. Background actors (DMN and Amygdala) and task subagents report into cortex over structured channels, so notifications stay useful instead of noisy.
-            </p>
-        </div>
-
-        <div class="quickstart-section">
-            <h2>// architecture</h2>
-            <div class="quickstart-content">
-                <div class="quickstart-step">
-                    <div class="step-number">A1</div>
-                    <div class="step-content">
-                        <h3>Cortex (Principal)</h3>
-                        <div class="prereq-list">
-                            The only actor that talks to you on Telegram. Handles quick local tasks directly and delegates longer work.
-                        </div>
-                    </div>
-                </div>
-                <div class="quickstart-step">
-                    <div class="step-number">A2</div>
-                    <div class="step-content">
-                        <h3>Background Cognition</h3>
-                        <div class="prereq-list">
-                            DMN and Amygdala run in heartbeat rounds, surface meaningful insights, and escalate through cortex with cooldown-based anti-spam.
-                        </div>
-                    </div>
-                </div>
-                <div class="quickstart-step">
-                    <div class="step-number">A3</div>
-                    <div class="step-content">
-                        <h3>Structured Signaling</h3>
-                        <div class="prereq-list">
-                            Actor messages carry metadata channels (for example <code>task_update</code>, <code>user_notify</code>) instead of in-band control tags.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer-info">
-            <a href="https://github.com/atemerev/lethe" target="_blank">github.com/atemerev/lethe</a>
-        </div>
-
-        <div class="quickstart-section">
-            <h2>// before you start</h2>
-            <div class="quickstart-content">
-                <p class="prereq-intro">You'll need three things. Get them ready before installing:</p>
-                
-                <div class="quickstart-step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h3>Telegram Bot Token</h3>
-                        <div class="prereq-list">
-                            Open Telegram, message <a href="https://t.me/BotFather" target="_blank">@BotFather</a>, send /newbot, follow the prompts. You'll get a token like <code>123456:ABC-xyz...</code>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="quickstart-step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h3>LLM API Key</h3>
-                        <div class="prereq-list">
-                            Get an API key from one of:<br>
-                            • <a href="https://openrouter.ai" target="_blank">OpenRouter</a> (access to many models)<br>
-                            • <a href="https://console.anthropic.com" target="_blank">Anthropic</a> (Claude)<br>
-                            • <a href="https://platform.openai.com" target="_blank">OpenAI</a> (GPT)
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="quickstart-step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h3>Your Telegram User ID</h3>
-                        <div class="prereq-list">
-                            Message <a href="https://t.me/userinfobot" target="_blank">@userinfobot</a> on Telegram. It replies with your ID (a number like <code>123456789</code>). This ensures only you can use your bot.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="quickstart-section">
-            <h2>// install</h2>
-            <div class="quickstart-content">
-                <div class="quickstart-step">
-                    <div class="step-number">01</div>
-                    <div class="step-content">
-                        <h3>Run the Installer</h3>
-                        <pre><code class="copyable" onclick="copyCode(this)">curl -fsSL https://lethe.gg/install | zsh</code></pre>
-                        <div class="install-note">Open Terminal (Mac) or any terminal on Linux. Paste this command and press Enter. The installer will ask for your tokens.</div>
-                    </div>
-                </div>
-                
-                <div class="quickstart-step">
-                    <div class="step-number">02</div>
-                    <div class="step-content">
-                        <h3>Start Chatting</h3>
-                        <div class="prereq-list">
-                            Open Telegram and message your bot. Say hello!
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="quickstart-section">
-            <h2>// options</h2>
-            <div class="quickstart-content">
-                <div class="quickstart-step">
-                    <div class="step-number">--</div>
-                    <div class="step-content">
-                        <h3>Full System Access</h3>
-                        <pre><code class="copyable" onclick="copyCode(this)">curl -fsSL https://lethe.gg/install | zsh -s -- --unsafe</code></pre>
-                        <div class="install-note">By default, Lethe runs in a container and can only access ~/lethe/. Use --unsafe to give it full access to your machine (files, commands, everything).</div>
-                    </div>
-                </div>
-
-                <div class="quickstart-step">
-                    <div class="step-number">--</div>
-                    <div class="step-content">
-                        <h3>Update</h3>
-                        <pre><code class="copyable" onclick="copyCode(this)">curl -fsSL https://lethe.gg/update | zsh</code></pre>
-                        <div class="install-note">Automatically detects container or native install and updates accordingly.</div>
-                    </div>
-                </div>
-
-                <div class="quickstart-step">
-                    <div class="step-number">--</div>
-                    <div class="step-content">
-                        <h3>Uninstall</h3>
-                        <pre><code class="copyable" onclick="copyCode(this)">curl -fsSL https://lethe.gg/uninstall | zsh</code></pre>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="blocks-container" id="blocks"></div>
-        
-        <div class="status-line" id="status">initializing...</div>
+<nav>
+    <div class="container">
+        <a href="#" class="nav-logo">LETHE</a>
+        <ul class="nav-links">
+            <li><a href="#how">How it works</a></li>
+            <li><a href="#install">Install</a></li>
+            <li><a href="https://github.com/atemerev/lethe">GitHub</a></li>
+        </ul>
     </div>
+</nav>
 
-    <script>
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        const blocksContainer = document.getElementById('blocks');
-        const statusLine = document.getElementById('status');
+<section class="hero">
+    <div class="container">
+        <div class="hero-tag">Open source · Runs locally · Private</div>
+        <h1>Your AI forgets you<br><span class="dim">every single time.</span></h1>
+        <p class="hero-sub">
+            Lethe is an AI assistant with persistent memory.
+            It runs on your machine, talks to you via Telegram, and remembers every conversation you've ever had.
+        </p>
+        <div class="hero-cta">
+            <a href="#install" class="btn btn-primary">Get Started</a>
+            <a href="https://github.com/atemerev/lethe" class="btn btn-ghost">View Source ↗</a>
+        </div>
+    </div>
+</section>
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+<section class="scenarios" id="how">
+    <div class="container">
+        <div class="section-label">// what this feels like</div>
+        <div class="section-title">Memory changes everything.</div>
+        <div class="section-text">
+            Persistent, associative, always-on memory — across every session.
+            Here's what that looks like in practice:
+        </div>
 
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        const blocks = [
-            {
-                title: 'core.memory',
-                content: 'Persistent memory across all sessions. Nothing is forgotten. Everything connects.',
-                meta: { agent: 1, iteration: 3 }
-            },
-            {
-                title: 'cortex.principal',
-                content: 'Single user-facing executive actor. Routes work, keeps context, decides what reaches the user.',
-                meta: { agent: 2, iteration: 7 },
-                parent: 0
-            },
-            {
-                title: 'background.dmn',
-                content: 'Periodic deep/quick background rounds for planning, reminders, reflection, and proactive ideas.',
-                meta: { agent: 3, iteration: 12 },
-                parent: 1
-            },
-            {
-                title: 'background.amygdala',
-                content: 'Fast emotional salience monitor. Escalates urgency patterns only when meaningful.',
-                meta: { agent: 1, iteration: 8 },
-                parent: 0
-            },
-            {
-                title: 'signal.channels',
-                content: 'Structured actor metadata channels (task_update, user_notify) replace fragile in-band tags.',
-                meta: { agent: 4, iteration: 5 },
-                parent: 1
-            },
-            {
-                title: 'notify.policy',
-                content: 'Background insights flow through cortex with cooldown + de-dup throttling to avoid user spam.',
-                meta: { agent: 2, iteration: 15 },
-                parent: 3
-            }
-        ];
-
-        const connections = [];
-        const blockElements = [];
-
-        function drawConnections() {
-            // Connections disabled
-            // ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
-
-        function createBlock(blockData, index) {
-            const block = document.createElement('div');
-            block.className = 'memory-block';
-            
-            const agentNum = blockData.meta.agent;
-            const iterNum = blockData.meta.iteration;
-            const blockId = `0x${Math.random().toString(16).substr(2, 8)}`;
-
-            block.innerHTML = `
-                <div class="block-header">
-                    <span class="block-meta">agent_${agentNum} / iter_${iterNum.toString().padStart(2, '0')}</span>
-                    <span class="block-id">${blockId}</span>
+        <div class="scenario-grid">
+            <div class="scenario">
+                <div class="scenario-time">3 weeks since last mention</div>
+                <div class="scenario-msg">
+                    <span class="user">you:</span> how's the thing going<br>
+                    <span class="lethe">lethe:</span> The Springer resubmission? You uploaded the revised
+                    manuscript on the 2nd but I never saw a confirmation email come through.
+                    Want me to check the submission portal?
                 </div>
-                <div class="block-title">${blockData.title}</div>
-                <div class="block-content">${blockData.content}</div>
-                ${blockData.parent !== undefined ? `<div class="block-links">↳ spawned_by: ${blocks[blockData.parent].title}</div>` : ''}
-            `;
+            </div>
 
-            blocksContainer.appendChild(block);
-            blockElements[index] = block;
+            <div class="scenario">
+                <div class="scenario-time">noticed on its own</div>
+                <div class="scenario-msg">
+                    <span class="lethe">lethe:</span> You haven't mentioned the visa renewal since March 12.
+                    The window closes in 9 days. Want me to draft the email to the consulate,
+                    or are you already on it?
+                </div>
+            </div>
 
-            if (blockData.parent !== undefined) {
-                connections.push({
-                    from: blockData.parent,
-                    to: index
-                });
-            }
-        }
+            <div class="scenario">
+                <div class="scenario-time">2am, deep in a codebase</div>
+                <div class="scenario-msg">
+                    <span class="user">you:</span> the coupling matrix isn't converging<br>
+                    <span class="lethe">lethe:</span> Same issue you hit in qsim last month — the spectral
+                    radius was &gt; 1 when you used uniform initialization. You switched to
+                    Xavier and it fixed it. Want me to check the init in social-codex?
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-        function initialize() {
-            // Create all blocks immediately
-            blocks.forEach((blockData, index) => {
-                createBlock(blockData, index);
-            });
+<section class="architecture">
+    <div class="container">
+        <div class="section-label">// architecture</div>
+        <div class="section-title">A cognitive system, modeled on the brain.</div>
+        <div class="section-text">
+            Specialized actors that think, remember, and act independently — coordinated
+            through structured message channels.
+        </div>
 
-            statusLine.textContent = 'system_ready // awaiting_input';
-            statusLine.style.animation = 'pulse 2s infinite';
+        <div class="arch-grid">
+            <div class="arch-node">
+                <div class="arch-node-name">cortex</div>
+                <div class="arch-node-desc">
+                    Executive layer. Your direct interface. Handles tasks, delegates work,
+                    manages context.
+                </div>
+            </div>
+            <div class="arch-node">
+                <div class="arch-node-name">hippocampus</div>
+                <div class="arch-node-desc">
+                    Associative memory retrieval. Pattern-completes context
+                    and surfaces what's relevant before you ask.
+                </div>
+            </div>
+            <div class="arch-node">
+                <div class="arch-node-name">dmn</div>
+                <div class="arch-node-desc">
+                    Default Mode Network. Scans goals in the background,
+                    connects dots, catches what you've missed.
+                </div>
+            </div>
+            <div class="arch-node">
+                <div class="arch-node-name">amygdala</div>
+                <div class="arch-node-desc">
+                    Emotional salience monitor. Tracks urgency, detects
+                    escalation, knows when to interrupt and when to wait.
+                </div>
+            </div>
+        </div>
 
-            drawConnections();
-        }
+        <div class="terminal-log">
+            <div class="log-line">
+                <span class="log-ts">01:24:18</span>
+                <span class="log-actor">dmn</span>
+                <span class="log-event">background round complete.</span>
+                <span class="log-ok">discovered new repo, updated project tracking</span>
+            </div>
+            <div class="log-line">
+                <span class="log-ts">01:24:19</span>
+                <span class="log-actor">amygdala</span>
+                <span class="log-event">salience check.</span>
+                <span class="log-ok">no escalation needed</span>
+            </div>
+            <div class="log-line">
+                <span class="log-ts">01:24:20</span>
+                <span class="log-actor">hippocampus</span>
+                <span class="log-event">recall triggered.</span>
+                <span class="log-ok">3 associative matches, injecting context</span>
+            </div>
+            <div class="log-line">
+                <span class="log-ts">01:24:21</span>
+                <span class="log-actor">cortex</span>
+                <span class="log-event">processing message.</span>
+                <span class="log-ok">context loaded, responding</span>
+            </div>
+            <div class="log-line">
+                <span class="log-ts">01:24:22</span>
+                <span class="log-actor">brainstem</span>
+                <span class="log-event">heartbeat.</span>
+                <span class="log-ok">all systems nominal</span>
+            </div>
+        </div>
+    </div>
+</section>
 
-        // Name glitch effect
-        function glitchName() {
-            const nameEl = document.querySelector('.system-name');
-            const originalText = 'LETHE';
-            const greekText = 'ΛΉΘΗ';
-            const corruptedStates = ['L3TH3', 'ᛚᛖᚦᛖ', '⟨⟨⟨⟨⟨', 'ΛΉΘΗ', '£€₮H€'];
-            
-            let flickerCount = 2 + Math.floor(Math.random() * 4); // 2-5 flickers
-            let currentFlicker = 0;
-            
-            function doFlicker() {
-                if (currentFlicker >= flickerCount) {
-                    nameEl.textContent = originalText;
-                    nameEl.style.textShadow = '';
-                    setTimeout(glitchName, 5000 + Math.random() * 15000);
-                    return;
-                }
-                
-                // Alternate between corrupted states and Greek
-                const text = currentFlicker % 2 === 0 ? 
-                    (Math.random() > 0.5 ? greekText : corruptedStates[Math.floor(Math.random() * corruptedStates.length)]) : 
-                    originalText;
-                    
-                nameEl.textContent = text;
-                nameEl.style.textShadow = '0 0 15px rgba(42, 220, 226, 1), 2px 2px 0 rgba(255, 0, 100, 0.5), -2px -2px 0 rgba(0, 255, 200, 0.5)';
-                
-                currentFlicker++;
-                setTimeout(doFlicker, 40 + Math.random() * 80); // Rapid flickers
-            }
-            
-            doFlicker();
-        }
-        
-        // Fast ID updates - 2-3 times per second
-        function updateBlockIDs() {
-            const allBlocks = document.querySelectorAll('.memory-block');
-            allBlocks.forEach(block => {
-                if (Math.random() < 0.6) { // 60% chance each cycle
-                    const idEl = block.querySelector('.block-id');
-                    if (idEl) {
-                        const newId = `0x${Math.random().toString(16).substr(2, 8)}`;
-                        idEl.textContent = newId;
-                    }
-                }
-            });
-        }
-        
-        // Update iteration numbers and agent numbers
-        function updateBlockMetadata() {
-            const allBlocks = document.querySelectorAll('.memory-block');
-            allBlocks.forEach((block, idx) => {
-                if (Math.random() < 0.4) { // 40% chance per cycle
-                    const metaEl = block.querySelector('.block-meta');
-                    
-                    if (metaEl) {
-                        // Update iteration number
-                        if (Math.random() < 0.7) {
-                            const match = metaEl.textContent.match(/iter_(\d+)/);
-                            if (match) {
-                                const currentIter = parseInt(match[1]);
-                                const newIter = currentIter + Math.floor(Math.random() * 4);
-                                metaEl.textContent = metaEl.textContent.replace(/iter_\d+/, `iter_${newIter.toString().padStart(2, '0')}`);
-                            }
-                        }
-                        
-                        // Occasionally update agent number
-                        if (Math.random() < 0.15) {
-                            const agentMatch = metaEl.textContent.match(/agent_(\d+)/);
-                            if (agentMatch) {
-                                const newAgent = 1 + Math.floor(Math.random() * 5);
-                                metaEl.textContent = metaEl.textContent.replace(/agent_\d+/, `agent_${newAgent}`);
-                            }
-                        }
-                    }
-                }
-            });
-        }
-        
-        // Glitch random block titles
-        function glitchBlockTitles() {
-            const titles = document.querySelectorAll('.block-title');
-            if (titles.length === 0) return;
-            
-            const randomTitle = titles[Math.floor(Math.random() * titles.length)];
-            randomTitle.style.animation = 'glitchText 0.3s ease-in-out';
-            randomTitle.style.textShadow = '2px 2px 0 rgba(255, 0, 100, 0.7), -2px -2px 0 rgba(0, 255, 200, 0.7)';
-            
-            setTimeout(() => {
-                randomTitle.style.animation = '';
-                randomTitle.style.textShadow = '';
-            }, 300);
-            
-            setTimeout(glitchBlockTitles, 2000 + Math.random() * 4000);
-        }
-        
-        // Glitch random blocks (border color flash)
-        function glitchBlocks() {
-            const blocks = document.querySelectorAll('.memory-block');
-            if (blocks.length === 0) return;
-            
-            const count = 1 + Math.floor(Math.random() * 3); // 1-3 blocks
-            const colors = [
-                'rgba(255, 0, 100, 0.6)',
-                'rgba(0, 255, 200, 0.6)',
-                'rgba(255, 255, 0, 0.6)',
-                'rgba(42, 220, 226, 0.8)'
-            ];
-            
-            for (let i = 0; i < count; i++) {
-                const randomBlock = blocks[Math.floor(Math.random() * blocks.length)];
-                const originalBorder = randomBlock.style.borderColor || 'rgba(42, 220, 226, 0.2)';
-                
-                // Flash through colors
-                let colorIndex = 0;
-                const flashInterval = setInterval(() => {
-                    randomBlock.style.borderColor = colors[colorIndex];
-                    colorIndex++;
-                    if (colorIndex >= colors.length) {
-                        clearInterval(flashInterval);
-                        randomBlock.style.borderColor = originalBorder;
-                    }
-                }, 80);
-            }
-            
-            setTimeout(glitchBlocks, 3000 + Math.random() * 5000);
-        }
-        
-        // Status line corruption
-        function glitchStatusLine() {
-            const status = document.getElementById('status');
-            if (!status) return;
-            
-            const originalText = status.textContent;
-            const corrupted = originalText.split('').map(c => 
-                Math.random() < 0.3 ? String.fromCharCode(33 + Math.floor(Math.random() * 94)) : c
-            ).join('');
-            
-            status.textContent = corrupted;
-            status.style.color = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.8)`;
-            
-            setTimeout(() => {
-                status.textContent = originalText;
-                status.style.color = 'rgba(42, 220, 226, 0.3)';
-            }, 100 + Math.random() * 200);
-            
-            setTimeout(glitchStatusLine, 5000 + Math.random() * 10000);
-        }
-        
-        // Run updates at different rates
-        setInterval(updateBlockIDs, 350 + Math.random() * 150); // 2-3 times/sec
-        setInterval(updateBlockMetadata, 1200 + Math.random() * 600); // Slower for numbers
-        
-        // Start glitching soon after load
-        setTimeout(glitchName, 2000 + Math.random() * 3000);
-        setTimeout(glitchBlockTitles, 3000 + Math.random() * 2000);
-        setTimeout(glitchBlocks, 4000 + Math.random() * 3000);
-        setTimeout(glitchStatusLine, 3000 + Math.random() * 2000);
+<section class="principles">
+    <div class="container">
+        <div class="section-label">// principles</div>
+        <div class="section-title">Why it works this way.</div>
 
-        // Initialize immediately
-        initialize();
+        <div class="principle-grid">
+            <div class="principle">
+                <h3>🔒 Fully local</h3>
+                <p>Runs on your machine. Only LLM API calls leave your computer.
+                   Everything else — memory, files, conversations — stays home.</p>
+            </div>
+            <div class="principle">
+                <h3>💬 Telegram-native</h3>
+                <p>Message your bot like you'd message a friend.
+                   Already installed, already in your pocket, always available.</p>
+            </div>
+            <div class="principle">
+                <h3>🧠 Real memory</h3>
+                <p>Working memory, long-term archival, associative recall.
+                   A genuine memory system that grows with you over months.</p>
+            </div>
+            <div class="principle">
+                <h3>🔓 Open source</h3>
+                <p>MIT licensed. Read every line of code, modify anything,
+                   run it forever. It's yours.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-        // Copy code to clipboard
-        function copyCode(element) {
-            const text = element.textContent;
-            navigator.clipboard.writeText(text).then(() => {
-                element.classList.add('copied');
-                const original = element.textContent;
-                element.textContent = '// copied!';
-                setTimeout(() => {
-                    element.classList.remove('copied');
-                    element.textContent = original;
-                }, 1500);
-            });
-        }
-    </script>
+<section class="install" id="install">
+    <div class="container">
+        <div class="section-label">// get started</div>
+        <div class="section-title">Two minutes to memory.</div>
+
+        <div class="install-steps">
+            <div class="install-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <h3>Install</h3>
+                    <p>One command. Works on macOS and Linux.</p>
+                    <div class="code-block">
+                        curl -fsSL https://lethe.gg/install | zsh
+                        <button class="copy-btn" onclick="copyCode(this)">copy</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="install-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <h3>Say hello</h3>
+                    <p>Open Telegram and message your bot. That's it. Lethe remembers from here on out.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="prereqs">
+            <h3>// you'll need</h3>
+            <ul>
+                <li>A <a href="https://t.me/BotFather">Telegram Bot Token</a> — message @BotFather, send /newbot</li>
+                <li>An LLM API key — <a href="https://openrouter.ai">OpenRouter</a>, <a href="https://console.anthropic.com">Anthropic</a>, or <a href="https://platform.openai.com">OpenAI</a></li>
+                <li>Your Telegram User ID — message <a href="https://t.me/userinfobot">@userinfobot</a></li>
+            </ul>
+        </div>
+
+        <div style="margin-top: 24px;">
+            <div class="code-block">
+                <span style="color: var(--text-dimmer);"># full system access (files, commands, everything):</span><br>
+                curl -fsSL https://lethe.gg/install | zsh -s -- --unsafe
+                <button class="copy-btn" onclick="copyCode(this)">copy</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="footer-left">lethe · open source · MIT</div>
+        <div class="footer-links">
+            <a href="https://github.com/atemerev/lethe">GitHub</a>
+            <a href="https://github.com/atemerev/lethe/issues">Issues</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+function copyCode(btn) {
+    const block = btn.parentElement;
+    const lines = block.textContent.replace('copy', '').trim().split('\n');
+    const code = lines.filter(l => !l.trim().startsWith('#')).join('\n').trim();
+    navigator.clipboard.writeText(code);
+    btn.textContent = 'copied!';
+    setTimeout(() => btn.textContent = 'copy', 1500);
+}
+</script>
+
 </body>
 </html>
