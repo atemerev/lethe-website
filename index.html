@@ -162,6 +162,7 @@
 
         /* Install */
         .install { border-top: 1px solid var(--border); }
+        .install .container { max-width: 1000px; }
         .install-steps { margin-top: 40px; display: flex; flex-direction: column; gap: 24px; }
         .install-step { display: flex; gap: 20px; align-items: flex-start; }
         .step-num {
@@ -174,11 +175,12 @@
         .step-content p { font-size: 14px; color: var(--text-dim); line-height: 1.6; }
         .code-block {
             font-family: var(--mono); font-size: 13px; background: var(--bg-subtle);
-            border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px;
+            border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px 16px 20px;
             margin-top: 10px; color: var(--accent); position: relative; overflow-x: auto;
+            min-width: 0;
         }
         .code-block .copy-btn {
-            position: absolute; right: 10px; top: 10px;
+            position: absolute; right: 10px; bottom: 10px;
             font-family: var(--mono); font-size: 11px; background: var(--border);
             border: none; color: var(--text-dim); padding: 4px 10px;
             border-radius: 4px; cursor: pointer; transition: all 0.2s;
