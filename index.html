@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lethe — The AI That Remembers You</title>
-    <meta name="description" content="An AI assistant with persistent memory that runs locally on your machine. Open source. Private. Yours.">
+    <meta name="description" content="An AI assistant with persistent memory. Runs fully local with Gemma 4, or with any cloud LLM. Open source. Private. Yours.">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -195,6 +195,20 @@
         .prereqs a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-dim); }
         .prereqs a:hover { border-color: var(--accent); }
 
+        /* Tabs */
+        .tab-bar {
+            display: flex; gap: 0; margin-top: 40px; border-bottom: 1px solid var(--border);
+        }
+        .tab-btn {
+            font-family: var(--mono); font-size: 13px; padding: 12px 24px;
+            background: none; border: none; color: var(--text-dim); cursor: pointer;
+            border-bottom: 2px solid transparent; transition: all 0.2s;
+        }
+        .tab-btn:hover { color: var(--text); }
+        .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+        .tab-content { display: none; padding-top: 24px; }
+        .tab-content.active { display: block; }
+
         /* Footer */
         footer { border-top: 1px solid var(--border); padding: 40px 0; }
         footer .container { display: flex; justify-content: space-between; align-items: center; }
@@ -215,6 +229,7 @@
             .install-step { flex-direction: column; gap: 12px; }
             footer .container { flex-direction: column; gap: 16px; text-align: center; }
             .scenario { padding: 20px; }
+            .tab-btn { padding: 10px 16px; font-size: 12px; }
         }
     </style>
 </head>
@@ -237,7 +252,7 @@
         <h1>Your AI forgets you<br><span class="dim">every single time.</span></h1>
         <p class="hero-sub">
             Lethe is an AI assistant with persistent memory.
-            It runs on your machine, talks to you via Telegram, and remembers every conversation you've ever had.
+            It runs on your hardware with a local LLM — or with any cloud API — talks to you via Telegram, and remembers everything.
         </p>
         <div class="hero-cta">
             <a href="#install" class="btn btn-primary">Get Started</a>
@@ -252,7 +267,7 @@
         <div class="section-title">Memory changes everything.</div>
         <div class="section-text">
             Persistent, associative, always-on memory — across every session.
-            Here's what that looks like in practice:
+            Skills it learns are never forgotten. Here's what that looks like:
         </div>
 
         <div class="scenario-grid">
@@ -267,21 +282,21 @@
             </div>
 
             <div class="scenario">
+                <div class="scenario-time">learned once, never forgets</div>
+                <div class="scenario-msg">
+                    <span class="user">you:</span> check my university emails<br>
+                    <span class="lethe">lethe:</span> <em>[recalls Graph API skill note, runs unimail list]</em><br>
+                    You've got 3 new ones since yesterday. Nathalie sent the
+                    defense schedule, and there's a quarantine notice from IT.
+                </div>
+            </div>
+
+            <div class="scenario">
                 <div class="scenario-time">noticed on its own</div>
                 <div class="scenario-msg">
                     <span class="lethe">lethe:</span> You haven't mentioned the visa renewal since March 12.
                     The window closes in 9 days. Want me to draft the email to the consulate,
                     or are you already on it?
-                </div>
-            </div>
-
-            <div class="scenario">
-                <div class="scenario-time">2am, deep in a codebase</div>
-                <div class="scenario-msg">
-                    <span class="user">you:</span> the coupling matrix isn't converging<br>
-                    <span class="lethe">lethe:</span> Same issue you hit in qsim last month — the spectral
-                    radius was &gt; 1 when you used uniform initialization. You switched to
-                    Xavier and it fixed it. Want me to check the init in social-codex?
                 </div>
             </div>
         </div>
@@ -308,8 +323,15 @@
             <div class="arch-node">
                 <div class="arch-node-name">hippocampus</div>
                 <div class="arch-node-desc">
-                    Associative memory retrieval. Pattern-completes context
-                    and surfaces what's relevant before you ask.
+                    Associative recall. Searches notes, archival memory, and conversations.
+                    Surfaces what's relevant before you ask.
+                </div>
+            </div>
+            <div class="arch-node">
+                <div class="arch-node-name">notes</div>
+                <div class="arch-node-desc">
+                    Persistent knowledge store. Skills, conventions, procedures — auto-extracted
+                    from tool sequences and always searchable.
                 </div>
             </div>
             <div class="arch-node">
@@ -317,13 +339,6 @@
                 <div class="arch-node-desc">
                     Default Mode Network. Scans goals in the background,
                     connects dots, catches what you've missed.
-                </div>
-            </div>
-            <div class="arch-node">
-                <div class="arch-node-name">amygdala</div>
-                <div class="arch-node-desc">
-                    Emotional salience monitor. Tracks urgency, detects
-                    escalation, knows when to interrupt and when to wait.
                 </div>
             </div>
         </div>
@@ -337,21 +352,21 @@
             </div>
             <div class="log-line">
                 <span class="log-ts">01:24:19</span>
-                <span class="log-actor">amygdala</span>
-                <span class="log-event">salience check.</span>
-                <span class="log-ok">no escalation needed</span>
+                <span class="log-actor">hippocampus</span>
+                <span class="log-event">recall triggered.</span>
+                <span class="log-ok">found 2 notes + 3 conversation matches</span>
             </div>
             <div class="log-line">
                 <span class="log-ts">01:24:20</span>
-                <span class="log-actor">hippocampus</span>
-                <span class="log-event">recall triggered.</span>
-                <span class="log-ok">3 associative matches, injecting context</span>
+                <span class="log-actor">cortex</span>
+                <span class="log-event">processing message.</span>
+                <span class="log-ok">context loaded, calling bash → read_file → responding</span>
             </div>
             <div class="log-line">
                 <span class="log-ts">01:24:21</span>
-                <span class="log-actor">cortex</span>
-                <span class="log-event">processing message.</span>
-                <span class="log-ok">context loaded, responding</span>
+                <span class="log-actor">notes</span>
+                <span class="log-event">auto-extract.</span>
+                <span class="log-ok">saved skill: "Deploy API via Graph endpoint"</span>
             </div>
             <div class="log-line">
                 <span class="log-ts">01:24:22</span>
@@ -371,8 +386,8 @@
         <div class="principle-grid">
             <div class="principle">
                 <h3>🔒 Fully local</h3>
-                <p>Runs on your machine. Only LLM API calls leave your computer.
-                   Everything else — memory, files, conversations — stays home.</p>
+                <p>Runs entirely on your machine with a local LLM like Gemma 4.
+                   Nothing leaves your computer. Or use any cloud API — your choice.</p>
             </div>
             <div class="principle">
                 <h3>💬 Telegram-native</h3>
@@ -381,8 +396,8 @@
             </div>
             <div class="principle">
                 <h3>🧠 Real memory</h3>
-                <p>Working memory, long-term archival, associative recall.
-                   A genuine memory system that grows with you over months.</p>
+                <p>Notes for skills and procedures, archival for facts, conversation history
+                   for context. A genuine memory system that grows with you.</p>
             </div>
             <div class="principle">
                 <h3>🔓 Open source</h3>
@@ -398,42 +413,93 @@
         <div class="section-label">// get started</div>
         <div class="section-title">Two minutes to memory.</div>
 
-        <div class="install-steps">
-            <div class="install-step">
-                <div class="step-num">1</div>
-                <div class="step-content">
-                    <h3>Install</h3>
-                    <p>One command. Works on macOS and Linux.</p>
-                    <div class="code-block">
-                        curl -fsSL https://lethe.gg/install | zsh
-                        <button class="copy-btn" onclick="copyCode(this)">copy</button>
+        <div class="tab-bar">
+            <button class="tab-btn active" onclick="showTab('cloud')">Cloud LLM</button>
+            <button class="tab-btn" onclick="showTab('local')">Local (Gemma 4)</button>
+        </div>
+
+        <div class="tab-content active" id="tab-cloud">
+            <div class="install-steps">
+                <div class="install-step">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <h3>Install</h3>
+                        <p>One command. Works on macOS and Linux.</p>
+                        <div class="code-block">
+                            curl -fsSL https://lethe.gg/install | bash
+                            <button class="copy-btn" onclick="copyCode(this)">copy</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="install-step">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <h3>Say hello</h3>
+                        <p>Open Telegram and message your bot. Lethe remembers from here on out.</p>
                     </div>
                 </div>
             </div>
 
-            <div class="install-step">
-                <div class="step-num">2</div>
-                <div class="step-content">
-                    <h3>Say hello</h3>
-                    <p>Open Telegram and message your bot. That's it. Lethe remembers from here on out.</p>
-                </div>
+            <div class="prereqs">
+                <h3>// you'll need</h3>
+                <ul>
+                    <li>A <a href="https://t.me/BotFather">Telegram Bot Token</a> — message @BotFather, send /newbot</li>
+                    <li>An LLM API key — <a href="https://openrouter.ai">OpenRouter</a>, <a href="https://console.anthropic.com">Anthropic</a>, or <a href="https://platform.openai.com">OpenAI</a></li>
+                    <li>Your Telegram User ID — message <a href="https://t.me/userinfobot">@userinfobot</a></li>
+                </ul>
             </div>
         </div>
 
-        <div class="prereqs">
-            <h3>// you'll need</h3>
-            <ul>
-                <li>A <a href="https://t.me/BotFather">Telegram Bot Token</a> — message @BotFather, send /newbot</li>
-                <li>An LLM API key — <a href="https://openrouter.ai">OpenRouter</a>, <a href="https://console.anthropic.com">Anthropic</a>, or <a href="https://platform.openai.com">OpenAI</a></li>
-                <li>Your Telegram User ID — message <a href="https://t.me/userinfobot">@userinfobot</a></li>
-            </ul>
-        </div>
+        <div class="tab-content" id="tab-local">
+            <div class="install-steps">
+                <div class="install-step">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <h3>Build llama.cpp</h3>
+                        <div class="code-block">
+                            git clone https://github.com/ggml-org/llama.cpp &amp;&amp; cd llama.cpp<br>
+                            cmake -B build -DGGML_CUDA=ON &amp;&amp; cmake --build build -j$(nproc)
+                            <button class="copy-btn" onclick="copyCode(this)">copy</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="install-step">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <h3>Start the model server</h3>
+                        <p>Download a Gemma 4 31B GGUF and run:</p>
+                        <div class="code-block">
+                            llama-server --model gemma-4-31B-it-Q8_0.gguf \<br>
+                            &nbsp;&nbsp;--split-mode tensor --jinja --reasoning-budget 4096 \<br>
+                            &nbsp;&nbsp;--ctx-size 98304 --parallel 2 --flash-attn on -fit off
+                            <button class="copy-btn" onclick="copyCode(this)">copy</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="install-step">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <h3>Install Lethe &amp; configure</h3>
+                        <div class="code-block">
+                            curl -fsSL https://lethe.gg/install | bash<br><br>
+                            <span style="color: var(--text-dimmer);"># then set in .env:</span><br>
+                            LLM_PROVIDER=openai<br>
+                            LLM_API_BASE=http://localhost:8090/v1<br>
+                            OPENAI_API_KEY=local
+                            <button class="copy-btn" onclick="copyCode(this)">copy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <div style="margin-top: 24px;">
-            <div class="code-block">
-                <span style="color: var(--text-dimmer);"># full system access (files, commands, everything):</span><br>
-                curl -fsSL https://lethe.gg/install | zsh -s -- --unsafe
-                <button class="copy-btn" onclick="copyCode(this)">copy</button>
+            <div class="prereqs">
+                <h3>// you'll need</h3>
+                <ul>
+                    <li>GPU with ~48GB+ VRAM (2x RTX 4090 for Q4, 4x for Q8)</li>
+                    <li>A <a href="https://t.me/BotFather">Telegram Bot Token</a></li>
+                    <li>A <a href="https://huggingface.co/bartowski">Gemma 4 31B GGUF</a> model file</li>
+                    <li>See <a href="https://github.com/atemerev/lethe#running-locally-with-gemma-4">full local setup guide</a> in the README</li>
+                </ul>
             </div>
         </div>
     </div>
@@ -457,6 +523,13 @@ function copyCode(btn) {
     navigator.clipboard.writeText(code);
     btn.textContent = 'copied!';
     setTimeout(() => btn.textContent = 'copy', 1500);
+}
+
+function showTab(name) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    event.target.classList.add('active');
 }
 </script>
 
