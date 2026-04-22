@@ -250,11 +250,12 @@
 
 <section class="hero">
     <div class="container">
-        <div class="hero-tag">Open source · Runs locally · Private</div>
+        <div class="hero-tag">Open source · Sandboxed · Private</div>
         <h1>Your AI forgets you<br><span class="dim">every single time.</span></h1>
         <p class="hero-sub">
             Lethe is an AI assistant with persistent memory.
-            It runs on your hardware with a local LLM — or with any cloud API — talks to you via Telegram, and remembers everything.
+            It runs on your machine with any cloud API or a local LLM, talks to you via Telegram, and remembers everything.
+            OS-level sandboxing keeps writes restricted to its own directory.
         </p>
         <div class="hero-cta">
             <a href="#install" class="btn btn-primary">Get Started</a>
@@ -380,9 +381,10 @@
 
         <div class="principle-grid">
             <div class="principle">
-                <h3>🏠 Your hardware, your data</h3>
-                <p>Runs on your GPU with Gemma 4 or any local model. Memory, conversations,
-                   files — everything stays on your machine. Cloud APIs optional, never required.</p>
+                <h3>🏠 Your machine, your data</h3>
+                <p>Runs natively on macOS and Linux with OS-level sandboxing (Landlock/Seatbelt).
+                   Memory, conversations, files — everything stays on your machine.
+                   Works with any cloud API or a local model.</p>
             </div>
             <div class="principle">
                 <h3>🧠 Memory that compounds</h3>
@@ -436,7 +438,7 @@
                 <h3>// you'll need</h3>
                 <ul>
                     <li>A <a href="https://t.me/BotFather">Telegram Bot Token</a> — message @BotFather, send /newbot</li>
-                    <li>An LLM API key — <a href="https://openrouter.ai">OpenRouter</a>, <a href="https://console.anthropic.com">Anthropic</a>, or <a href="https://platform.openai.com">OpenAI</a></li>
+                    <li>An LLM API key or subscription — <a href="https://openrouter.ai">OpenRouter</a>, <a href="https://console.anthropic.com">Anthropic</a> (API key or Claude subscription), or <a href="https://platform.openai.com">OpenAI</a></li>
                     <li>Your Telegram User ID — message <a href="https://t.me/userinfobot">@userinfobot</a></li>
                 </ul>
             </div>
@@ -459,9 +461,9 @@
                     <div class="step-num">2</div>
                     <div class="step-content">
                         <h3>Start the model server</h3>
-                        <p>Download a Gemma 4 31B GGUF and run:</p>
+                        <p>Download a Gemma 4 27B GGUF and run:</p>
                         <div class="code-block">
-                            llama-server --model gemma-4-31B-it-Q8_0.gguf \<br>
+                            llama-server --model gemma-4-27B-it-Q8_0.gguf \<br>
                             &nbsp;&nbsp;--split-mode tensor --jinja --reasoning-budget 4096 \<br>
                             &nbsp;&nbsp;--ctx-size 98304 --parallel 2 --flash-attn on -fit off
                             <button class="copy-btn" onclick="copyCode(this)">copy</button>
@@ -489,7 +491,7 @@
                 <ul>
                     <li>GPU with ~48GB+ VRAM (2x RTX 4090 for Q4, 4x for Q8)</li>
                     <li>A <a href="https://t.me/BotFather">Telegram Bot Token</a></li>
-                    <li>A <a href="https://huggingface.co/bartowski">Gemma 4 31B GGUF</a> model file</li>
+                    <li>A <a href="https://huggingface.co/bartowski">Gemma 4 27B GGUF</a> model file</li>
                     <li>See <a href="https://github.com/atemerev/lethe#running-locally-with-gemma-4">full local setup guide</a> in the README</li>
                 </ul>
             </div>
