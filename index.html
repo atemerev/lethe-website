@@ -461,9 +461,9 @@
                     <div class="step-num">2</div>
                     <div class="step-content">
                         <h3>Start the model server</h3>
-                        <p>Download a Gemma 4 27B GGUF and run:</p>
+                        <p>Download a Gemma 4 31B GGUF and run:</p>
                         <div class="code-block">
-                            llama-server --model gemma-4-27B-it-Q8_0.gguf \<br>
+                            llama-server --model gemma-4-31B-it-Q8_0.gguf \<br>
                             &nbsp;&nbsp;--split-mode tensor --jinja --reasoning-budget 4096 \<br>
                             &nbsp;&nbsp;--ctx-size 98304 --parallel 2 --flash-attn on -fit off
                             <button class="copy-btn" onclick="copyCode(this)">copy</button>
@@ -491,7 +491,7 @@
                 <ul>
                     <li>GPU with ~48GB+ VRAM (2x RTX 4090 for Q4, 4x for Q8)</li>
                     <li>A <a href="https://t.me/BotFather">Telegram Bot Token</a></li>
-                    <li>A <a href="https://huggingface.co/bartowski">Gemma 4 27B GGUF</a> model file</li>
+                    <li>A <a href="https://huggingface.co/bartowski">Gemma 4 31B GGUF</a> model file</li>
                     <li>See <a href="https://github.com/atemerev/lethe#running-locally-with-gemma-4">full local setup guide</a> in the README</li>
                 </ul>
             </div>
