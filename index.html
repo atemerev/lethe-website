@@ -250,12 +250,12 @@
 
 <section class="hero">
     <div class="container">
-        <div class="hero-tag">Open source · Sandboxed · Private</div>
+        <div class="hero-tag">Open source · Container-isolated · Private</div>
         <h1>Your AI forgets you<br><span class="dim">every single time.</span></h1>
         <p class="hero-sub">
             Lethe is an AI assistant with persistent memory.
             It runs on your machine with any cloud API or a local LLM, talks to you via Telegram, and remembers everything.
-            OS-level sandboxing keeps writes restricted to its own directory.
+            Runs in an isolated container with access only to directories you choose.
         </p>
         <div class="hero-cta">
             <a href="#install" class="btn btn-primary">Get Started</a>
@@ -382,7 +382,8 @@
         <div class="principle-grid">
             <div class="principle">
                 <h3>🏠 Your machine, your data</h3>
-                <p>Runs natively on macOS and Linux with OS-level sandboxing (Landlock/Seatbelt).
+                <p>Runs in an isolated container on macOS and Linux.
+                   It can only access directories you explicitly allow.
                    Memory, conversations, files — everything stays on your machine.
                    Works with any cloud API or a local model.</p>
             </div>
