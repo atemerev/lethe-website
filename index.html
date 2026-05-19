@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lethe — The AI That Remembers You</title>
-    <meta name="description" content="An AI assistant with persistent memory. Runs fully local with Gemma 4, or with any cloud LLM. Open source. Private. Yours.">
+    <title>Lethe — Brain-Centric AI Assistant</title>
+    <meta name="description" content="Lethe is a brain-centric cognitive architecture for a long-running AI assistant: memory, attention, background thought, supervision, and delegation as explicit runtime systems.">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -71,6 +71,11 @@
         .hero-tag {
             font-family: var(--mono); font-size: 13px; color: var(--accent);
             letter-spacing: 3px; text-transform: uppercase; margin-bottom: 24px; opacity: 0.8;
+        }
+        .hero-avatar {
+            width: 104px; height: 104px; object-fit: cover; border-radius: 50%;
+            border: 1px solid var(--border-hover); margin-bottom: 24px;
+            box-shadow: 0 0 50px var(--accent-glow);
         }
         .hero h1 {
             font-size: clamp(36px, 6vw, 56px); font-weight: 700;
@@ -241,7 +246,7 @@
     <div class="container">
         <a href="#" class="nav-logo">LETHE</a>
         <ul class="nav-links">
-            <li><a href="#how">How it works</a></li>
+            <li><a href="#architecture">Architecture</a></li>
             <li><a href="#install">Install</a></li>
             <li><a href="https://github.com/atemerev/lethe">GitHub</a></li>
         </ul>
@@ -250,12 +255,13 @@
 
 <section class="hero">
     <div class="container">
-        <div class="hero-tag">Open source · Container-isolated · Private</div>
-        <h1>Your AI forgets you<br><span class="dim">every single time.</span></h1>
+        <img class="hero-avatar" src="lethe-avatar.png" alt="Lethe avatar">
+        <div class="hero-tag">Brain-centric · Long-running · Open source</div>
+        <h1>Lethe is an AI assistant<br><span class="dim">with a cognitive architecture.</span></h1>
         <p class="hero-sub">
-            Lethe is an AI assistant with persistent memory.
-            It runs on your machine with any cloud API or a local LLM, talks to you via Telegram, and remembers everything.
-            Runs in an isolated container with access only to directories you choose.
+            Not a single chat loop with memory bolted on. Lethe separates executive control,
+            associative recall, background thought, supervision, attention gating, and delegation
+            into explicit runtime systems that run 24/7 on your machine.
         </p>
         <div class="hero-cta">
             <a href="#install" class="btn btn-primary">Get Started</a>
@@ -266,16 +272,16 @@
 
 <section class="scenarios" id="how">
     <div class="container">
-        <div class="section-label">// what this feels like</div>
-        <div class="section-title">Memory changes everything.</div>
+        <div class="section-label">// what this enables</div>
+        <div class="section-title">Continuity over days, not turns.</div>
         <div class="section-text">
-            Persistent, associative, always-on memory — across every session.
-            Skills it learns are never forgotten. Here's what that looks like:
+            The point is not a longer context window. The point is a persistent cognitive system
+            that can remember, notice, delegate, and decide when something is worth your attention.
         </div>
 
         <div class="scenario-grid">
             <div class="scenario">
-                <div class="scenario-time">3 weeks since last mention</div>
+                <div class="scenario-time">hippocampus recalls the shape of the work</div>
                 <div class="scenario-msg">
                     <span class="user">you:</span> how's the thing going<br>
                     <span class="lethe">lethe:</span> The Springer resubmission? You uploaded the revised
@@ -285,17 +291,17 @@
             </div>
 
             <div class="scenario">
-                <div class="scenario-time">learned once, never forgets</div>
+                <div class="scenario-time">cortex delegates without blocking the conversation</div>
                 <div class="scenario-msg">
-                    <span class="user">you:</span> check my university emails<br>
-                    <span class="lethe">lethe:</span> <em>[recalls Graph API skill note, runs unimail list]</em><br>
-                    You've got 3 new ones since yesterday. Nathalie sent the
-                    defense schedule, and there's a quarantine notice from IT.
+                    <span class="user">you:</span> audit the deployment scripts<br>
+                    <span class="lethe">lethe:</span> I spawned a subagent for the script review.
+                    It will report actual progress every two minutes and return a terminal result
+                    when the pass is complete.
                 </div>
             </div>
 
             <div class="scenario">
-                <div class="scenario-time">noticed on its own</div>
+                <div class="scenario-time">dmn notices, notification gate filters</div>
                 <div class="scenario-msg">
                     <span class="lethe">lethe:</span> You haven't mentioned the visa renewal since March 12.
                     The window closes in 9 days. Want me to draft the email to the consulate,
@@ -306,35 +312,56 @@
     </div>
 </section>
 
-<section class="architecture">
+<section class="architecture" id="architecture">
     <div class="container">
         <div class="section-label">// architecture</div>
-        <div class="section-title">A cognitive system, modeled on the brain.</div>
+        <div class="section-title">Brain-inspired, code-bound.</div>
         <div class="section-text">
-            Specialized actors that think, remember, and act independently — coordinated
-            through structured message channels.
+            The names are not decoration. Cortex, hippocampus, DMN, and brainstem are software
+            boundaries with separate responsibilities, logs, tests, and interfaces.
         </div>
 
         <div class="arch-grid">
             <div class="arch-node">
                 <div class="arch-node-name">cortex</div>
                 <div class="arch-node-desc">
-                    Executive layer. Your direct interface. Handles tasks, delegates work,
-                    manages context.
+                    Conscious executive. Talks to you, chooses tools, decides when to act directly,
+                    and when to delegate.
                 </div>
             </div>
             <div class="arch-node">
                 <div class="arch-node-name">hippocampus</div>
                 <div class="arch-node-desc">
-                    Associative recall. Searches notes, archival memory, and conversations.
-                    Surfaces what's relevant before you ask.
+                    Associative recall over notes, archival memory, and conversation history,
+                    biased by current salience.
                 </div>
             </div>
             <div class="arch-node">
                 <div class="arch-node-name">dmn</div>
                 <div class="arch-node-desc">
-                    Default Mode Network. Scans goals in the background,
-                    connects dots, catches what you've missed.
+                    Default Mode Network. Runs between user turns, scans goals, reflects,
+                    and surfaces useful signals.
+                </div>
+            </div>
+            <div class="arch-node">
+                <div class="arch-node-name">brainstem</div>
+                <div class="arch-node-desc">
+                    Autonomic supervision for startup, health, resources, release checks,
+                    and runtime state.
+                </div>
+            </div>
+            <div class="arch-node">
+                <div class="arch-node-name">subagents</div>
+                <div class="arch-node-desc">
+                    Focused workers with their own tools, state, progress updates,
+                    and terminal results.
+                </div>
+            </div>
+            <div class="arch-node">
+                <div class="arch-node-name">attention gate</div>
+                <div class="arch-node-desc">
+                    Background thoughts become user messages only after scoring,
+                    gating, and LLM review.
                 </div>
             </div>
         </div>
@@ -343,32 +370,32 @@
             <div class="log-line">
                 <span class="log-ts">01:24:18</span>
                 <span class="log-actor">dmn</span>
-                <span class="log-event">background round complete.</span>
-                <span class="log-ok">discovered new repo, updated project tracking</span>
+                <span class="log-event">background cognition complete.</span>
+                <span class="log-ok">found possible deadline drift</span>
             </div>
             <div class="log-line">
                 <span class="log-ts">01:24:19</span>
                 <span class="log-actor">hippocampus</span>
                 <span class="log-event">recall triggered.</span>
-                <span class="log-ok">found 2 notes + 3 conversation matches</span>
+                <span class="log-ok">2 notes, 3 conversation matches, salience bias active</span>
             </div>
             <div class="log-line">
                 <span class="log-ts">01:24:20</span>
                 <span class="log-actor">cortex</span>
-                <span class="log-event">processing message.</span>
-                <span class="log-ok">context loaded, calling bash → read_file → responding</span>
+                <span class="log-event">delegation decision.</span>
+                <span class="log-ok">spawned subagent: deployment audit</span>
             </div>
             <div class="log-line">
-                <span class="log-ts">01:24:21</span>
-                <span class="log-actor">notes</span>
-                <span class="log-event">auto-extract.</span>
-                <span class="log-ok">saved skill: "Deploy API via Graph endpoint"</span>
+                <span class="log-ts">01:26:20</span>
+                <span class="log-actor">subagent</span>
+                <span class="log-event">progress report.</span>
+                <span class="log-ok">checked install path, reviewing update path</span>
             </div>
             <div class="log-line">
-                <span class="log-ts">01:24:22</span>
-                <span class="log-actor">brainstem</span>
-                <span class="log-event">heartbeat.</span>
-                <span class="log-ok">all systems nominal</span>
+                <span class="log-ts">01:26:21</span>
+                <span class="log-actor">attention</span>
+                <span class="log-event">notification reviewed.</span>
+                <span class="log-ok">held for cortex decision</span>
             </div>
         </div>
     </div>
@@ -377,27 +404,23 @@
 <section class="principles">
     <div class="container">
         <div class="section-label">// principles</div>
-        <div class="section-title">Why it works this way.</div>
+        <div class="section-title">Built like a runtime, not a prompt trick.</div>
 
         <div class="principle-grid">
             <div class="principle">
-                <h3>🏠 Your machine, your data</h3>
-                <p>Runs in an isolated container on macOS and Linux.
-                   It can only access directories you explicitly allow.
-                   Memory, conversations, files — everything stays on your machine.
-                   Works with any cloud API or a local model.</p>
+                <h3>Architecture over prompt stuffing</h3>
+                <p>Memory, background cognition, actor lifecycle, tool policy, and notifications
+                   are explicit subsystems. The model is powerful, but the runtime gives it shape.</p>
             </div>
             <div class="principle">
-                <h3>🧠 Memory that compounds</h3>
-                <p>Not just chat history. Lethe builds structured knowledge — skills it learns,
-                   conventions you set, procedures it discovers. The longer you use it,
-                   the less you repeat yourself.</p>
+                <h3>Memory with attention</h3>
+                <p>Lethe stores notes, project context, archival memory, and conversation history,
+                   then recalls what matters through associative search and salience tracking.</p>
             </div>
             <div class="principle">
-                <h3>🔧 Fully open, fully yours</h3>
-                <p>MIT licensed. Every prompt, every memory decision, every tool call is
-                   in the source. Customize the persona, swap the model, rewrite the rules.
-                   No black boxes.</p>
+                <h3>Your machine, your data</h3>
+                <p>Runs in an isolated container on macOS and Linux, with access only to directories
+                   you choose. Use cloud models, subscriptions, OpenRouter, OpenAI, or local Gemma.</p>
             </div>
         </div>
     </div>
