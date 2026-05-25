@@ -218,8 +218,34 @@
 
         /* Footer */
         footer { border-top: 1px solid var(--border); padding: 40px 0; }
-        footer .container { display: flex; justify-content: space-between; align-items: center; }
+        footer .container { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
         .footer-left { font-family: var(--mono); font-size: 13px; color: var(--text-dimmer); }
+        .sms-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: var(--mono); font-size: 11px;
+            color: var(--text-dim);
+            text-transform: lowercase;
+            letter-spacing: 0.04em;
+            text-decoration: none;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .sms-badge:hover { border-color: var(--border-hover); color: var(--text); }
+        .sms-badge .ch-flag {
+            display: inline-block;
+            width: 14px; height: 14px;
+            background: #ff0000;
+            position: relative;
+            border-radius: 1px;
+        }
+        .sms-badge .ch-flag::before,
+        .sms-badge .ch-flag::after {
+            content: ''; position: absolute; background: #fff;
+        }
+        .sms-badge .ch-flag::before { left: 3px; right: 3px; top: 6px; height: 2px; }
+        .sms-badge .ch-flag::after { top: 3px; bottom: 3px; left: 6px; width: 2px; }
         .footer-links { display: flex; gap: 20px; }
         .footer-links a {
             font-family: var(--mono); font-size: 13px; color: var(--text-dim);
@@ -526,6 +552,10 @@
 <footer>
     <div class="container">
         <div class="footer-left">lethe · open source · MIT</div>
+        <a class="sms-badge" href="https://www.swissmadesoftware.org/en/home.html" rel="noopener" target="_blank">
+            <span class="ch-flag" aria-hidden="true"></span>
+            <span>swiss made software</span>
+        </a>
         <div class="footer-links">
             <a href="https://github.com/atemerev/lethe">GitHub</a>
             <a href="https://github.com/atemerev/lethe/issues">Issues</a>
