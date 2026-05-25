@@ -229,10 +229,7 @@
             color: var(--text-dim);
             text-transform: lowercase;
             letter-spacing: 0.04em;
-            text-decoration: none;
-            transition: border-color 0.2s, color 0.2s;
         }
-        .sms-badge:hover { border-color: var(--border-hover); color: var(--text); }
         .sms-badge .ch-flag {
             display: inline-block;
             width: 14px; height: 14px;
@@ -552,10 +549,10 @@
 <footer>
     <div class="container">
         <div class="footer-left">lethe · open source · MIT</div>
-        <a class="sms-badge" href="https://www.swissmadesoftware.org/en/home.html" rel="noopener" target="_blank">
+        <span class="sms-badge">
             <span class="ch-flag" aria-hidden="true"></span>
             <span>swiss made software</span>
-        </a>
+        </span>
         <div class="footer-links">
             <a href="https://github.com/atemerev/lethe">GitHub</a>
             <a href="https://github.com/atemerev/lethe/issues">Issues</a>
