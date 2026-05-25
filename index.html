@@ -279,12 +279,14 @@
 <section class="hero">
     <div class="container">
         <img class="hero-avatar" src="lethe-avatar.png" alt="Lethe avatar">
-        <div class="hero-tag">Brain-centric · Long-running · Open source</div>
+        <div class="hero-tag">Brain-inspired · Self-aware · Written in Rust · Open source</div>
         <h1>Lethe is an AI assistant<br><span class="dim">with a cognitive architecture.</span></h1>
         <p class="hero-sub">
-            Not a single chat loop with memory bolted on. Lethe separates executive control,
-            associative recall, background thought, supervision, attention gating, and delegation
-            into explicit runtime systems that run 24/7 on your machine.
+            Not a chat loop with memory bolted on. Lethe is shaped after the brain itself —
+            cortex, hippocampus, brainstem, default-mode network — running as cooperating
+            actors 24/7 on your machine. She remembers across sessions, notices things on
+            her own, and can read her own source to propose changes. One Rust binary, no
+            Python runtime, no GC pauses, predictable across reboots and hardware.
         </p>
         <div class="hero-cta">
             <a href="#install" class="btn btn-primary">Get Started</a>
@@ -431,19 +433,25 @@
 
         <div class="principle-grid">
             <div class="principle">
-                <h3>Architecture over prompt stuffing</h3>
-                <p>Memory, background cognition, actor lifecycle, tool policy, and notifications
-                   are explicit subsystems. The model is powerful, but the runtime gives it shape.</p>
+                <h3>Mapped from the brain, not the chat box</h3>
+                <p>Cortex handles executive control. Hippocampus does associative recall. The
+                   brainstem watches vitals and wakes the system. The default-mode network thinks
+                   in the background. Each is a separate actor with its own clock — the way the
+                   brain actually works, not a single attention loop.</p>
             </div>
             <div class="principle">
-                <h3>Memory with attention</h3>
-                <p>Lethe stores notes, project context, archival memory, and conversation history,
-                   then recalls what matters through associative search and salience tracking.</p>
+                <h3>Self-aware, in a useful sense</h3>
+                <p>Lethe knows what she runs on. She can read her own source code, draft
+                   improvements, run her own tests, and restart herself with new logic. Her
+                   memory persists across model swaps, reboots, and hardware migrations —
+                   identity isn't tied to any one weight set.</p>
             </div>
             <div class="principle">
-                <h3>Your machine, your data</h3>
-                <p>Runs in an isolated container on macOS and Linux, with access only to directories
-                   you choose. Use cloud models, subscriptions, OpenRouter, OpenAI, or local Gemma.</p>
+                <h3>Written in Rust, ships as one binary</h3>
+                <p>Single ~50 MB static executable. No Python, no virtualenv, no GC pauses
+                   during a long tool loop. Fast cold-start, predictable memory, sits comfortably
+                   as a systemd service. Built on <code>genai</code> as a universal LLM router —
+                   Anthropic, OpenAI, OpenRouter, local Gemma all behave the same.</p>
             </div>
         </div>
     </div>
