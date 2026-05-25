@@ -280,33 +280,35 @@
     <div class="container">
         <img class="hero-avatar" src="lethe-avatar.png" alt="Lethe avatar">
         <div class="hero-tag">Brain-inspired · Self-aware · Written in Rust · Open source</div>
-        <h1>Lethe is an AI assistant<br><span class="dim">with a cognitive architecture.</span></h1>
+        <h1>Lethe is an AI assistant<br><span class="dim">who remembers you.</span></h1>
         <p class="hero-sub">
-            Not a chat loop with memory bolted on. Lethe is shaped after the brain itself —
-            cortex, hippocampus, brainstem, default-mode network — running as cooperating
-            actors 24/7 on your machine. She remembers across sessions, notices things on
-            her own, and can read her own source to propose changes. One Rust binary, no
-            Python runtime, no GC pauses, predictable across reboots and hardware.
+            Most assistants reset the moment you close the tab. Lethe doesn't. She lives on
+            your machine as a Rust service — cortex, hippocampus, default-mode network, and
+            brainstem, each on its own clock — and she keeps thinking when you're not looking.
+            Past conversations stay in reach. Things you mentioned weeks ago come back when
+            they matter. And when she finds something worth fixing, she can read her own
+            source code and propose the change.
         </p>
         <div class="hero-cta">
-            <a href="#install" class="btn btn-primary">Get Started</a>
-            <a href="https://github.com/atemerev/lethe" class="btn btn-ghost">View Source ↗</a>
+            <a href="#install" class="btn btn-primary">Bring her up</a>
+            <a href="https://github.com/atemerev/lethe" class="btn btn-ghost">Read the source ↗</a>
         </div>
     </div>
 </section>
 
 <section class="scenarios" id="how">
     <div class="container">
-        <div class="section-label">// what this enables</div>
-        <div class="section-title">Continuity over days, not turns.</div>
+        <div class="section-label">// what this changes</div>
+        <div class="section-title">She holds the thread for as long as you do.</div>
         <div class="section-text">
-            The point is not a longer context window. The point is a persistent cognitive system
-            that can remember, notice, delegate, and decide when something is worth your attention.
+            A longer context window isn't the point. What you want is something that remembers
+            the work, notices what slipped, and decides — on its own — when something is worth
+            interrupting you for.
         </div>
 
         <div class="scenario-grid">
             <div class="scenario">
-                <div class="scenario-time">hippocampus recalls the shape of the work</div>
+                <div class="scenario-time">she remembers what you were doing two weeks ago</div>
                 <div class="scenario-msg">
                     <span class="user">you:</span> how's the thing going<br>
                     <span class="lethe">lethe:</span> The Springer resubmission? You uploaded the revised
@@ -316,17 +318,17 @@
             </div>
 
             <div class="scenario">
-                <div class="scenario-time">cortex delegates without blocking the conversation</div>
+                <div class="scenario-time">she hands work off and keeps talking</div>
                 <div class="scenario-msg">
                     <span class="user">you:</span> audit the deployment scripts<br>
-                    <span class="lethe">lethe:</span> I spawned a subagent for the script review.
-                    It will report actual progress every two minutes and return a terminal result
-                    when the pass is complete.
+                    <span class="lethe">lethe:</span> Already on it — sent a subagent to do the review.
+                    It'll check in every couple of minutes and ping me with the result.
+                    What else?
                 </div>
             </div>
 
             <div class="scenario">
-                <div class="scenario-time">dmn notices, notification gate filters</div>
+                <div class="scenario-time">she catches what fell through the cracks</div>
                 <div class="scenario-msg">
                     <span class="lethe">lethe:</span> You haven't mentioned the visa renewal since March 12.
                     The window closes in 9 days. Want me to draft the email to the consulate,
@@ -340,53 +342,53 @@
 <section class="architecture" id="architecture">
     <div class="container">
         <div class="section-label">// architecture</div>
-        <div class="section-title">Brain-inspired, code-bound.</div>
+        <div class="section-title">The brain names aren't metaphors.</div>
         <div class="section-text">
-            The names are not decoration. Cortex, hippocampus, DMN, and brainstem are software
-            boundaries with separate responsibilities, logs, tests, and interfaces.
+            Each region is a real actor with its own job, its own clock, and its own logs.
+            The architecture isn't loosely "inspired by" neuroscience — it's mapped to it.
         </div>
 
         <div class="arch-grid">
             <div class="arch-node">
                 <div class="arch-node-name">cortex</div>
                 <div class="arch-node-desc">
-                    Conscious executive. Talks to you, chooses tools, decides when to act directly,
-                    and when to delegate.
+                    The voice you talk to. Picks tools, hands work off, decides when to step in
+                    and when to wait.
                 </div>
             </div>
             <div class="arch-node">
                 <div class="arch-node-name">hippocampus</div>
                 <div class="arch-node-desc">
-                    Associative recall over notes, archival memory, and conversation history,
-                    biased by current salience.
+                    Pulls relevant memories — notes, archives, old conversations — biased toward
+                    what feels load-bearing right now.
                 </div>
             </div>
             <div class="arch-node">
                 <div class="arch-node-name">dmn</div>
                 <div class="arch-node-desc">
-                    Default Mode Network. Runs between user turns, scans goals, reflects,
-                    and surfaces useful signals.
+                    Default-mode network. Thinks between turns, drifts across goals, occasionally
+                    catches something the rest of the system missed.
                 </div>
             </div>
             <div class="arch-node">
                 <div class="arch-node-name">brainstem</div>
                 <div class="arch-node-desc">
-                    Autonomic supervision for startup, health, resources, release checks,
-                    and runtime state.
+                    The autonomic layer. Boots the system, watches resources, runs release checks,
+                    keeps the lights on.
                 </div>
             </div>
             <div class="arch-node">
                 <div class="arch-node-name">subagents</div>
                 <div class="arch-node-desc">
-                    Focused workers with their own tools, state, progress updates,
-                    and terminal results.
+                    One-task workers spawned for specific jobs. They report progress and come back
+                    with a clean result.
                 </div>
             </div>
             <div class="arch-node">
                 <div class="arch-node-name">attention gate</div>
                 <div class="arch-node-desc">
-                    Background thoughts become user messages only after scoring,
-                    gating, and LLM review.
+                    Decides whether a background thought is worth interrupting you for.
+                    Most aren't. The ones that are, get through.
                 </div>
             </div>
         </div>
@@ -429,29 +431,29 @@
 <section class="principles">
     <div class="container">
         <div class="section-label">// principles</div>
-        <div class="section-title">Built like a runtime, not a prompt trick.</div>
+        <div class="section-title">A runtime, not a prompt trick.</div>
 
         <div class="principle-grid">
             <div class="principle">
-                <h3>Mapped from the brain, not the chat box</h3>
-                <p>Cortex handles executive control. Hippocampus does associative recall. The
-                   brainstem watches vitals and wakes the system. The default-mode network thinks
-                   in the background. Each is a separate actor with its own clock — the way the
-                   brain actually works, not a single attention loop.</p>
+                <h3>A brain has parts. So does she.</h3>
+                <p>Cortex talks. Hippocampus remembers. Brainstem keeps the process alive. The
+                   default-mode network drifts and thinks. Each runs on its own clock — closer
+                   to how a brain actually works than to one attention loop with tools strapped
+                   to it.</p>
             </div>
             <div class="principle">
-                <h3>Self-aware, in a useful sense</h3>
-                <p>Lethe knows what she runs on. She can read her own source code, draft
-                   improvements, run her own tests, and restart herself with new logic. Her
-                   memory persists across model swaps, reboots, and hardware migrations —
-                   identity isn't tied to any one weight set.</p>
+                <h3>She can change herself.</h3>
+                <p>She knows where her source lives and can read it. She knows her own process
+                   and can restart with new code. Her memory survives model swaps, reboots, and
+                   new hardware — who she is isn't tied to any one weight set. You can rebuild
+                   her tomorrow and she'll still remember today.</p>
             </div>
             <div class="principle">
-                <h3>Written in Rust, ships as one binary</h3>
-                <p>Single ~50 MB static executable. No Python, no virtualenv, no GC pauses
-                   during a long tool loop. Fast cold-start, predictable memory, sits comfortably
-                   as a systemd service. Built on <code>genai</code> as a universal LLM router —
-                   Anthropic, OpenAI, OpenRouter, local Gemma all behave the same.</p>
+                <h3>One Rust binary. Yours.</h3>
+                <p>Around 50 MB, statically linked. No Python, no virtualenv pinball, no pauses
+                   when a tool loop gets long. Boots in milliseconds, sits comfortably as a
+                   systemd service, swaps cleanly between Anthropic, OpenAI, OpenRouter, and a
+                   local Gemma without changing anything else.</p>
             </div>
         </div>
     </div>
@@ -484,7 +486,7 @@
                     <div class="step-num">2</div>
                     <div class="step-content">
                         <h3>Say hello</h3>
-                        <p>Open Telegram and message your bot. Lethe remembers from here on out.</p>
+                        <p>Message your bot on Telegram. From this point on, she remembers.</p>
                     </div>
                 </div>
             </div>
