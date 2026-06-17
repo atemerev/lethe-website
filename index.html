@@ -97,6 +97,30 @@
         .btn-primary:hover { background: #00e6b8; transform: translateY(-1px); box-shadow: 0 4px 20px var(--accent-dim); }
         .btn-ghost { background: transparent; color: var(--text-dim); border: 1px solid var(--border); }
         .btn-ghost:hover { border-color: var(--border-hover); color: var(--text); }
+        .btn-nav { padding: 8px 18px; font-size: 13px; }
+
+        /* Nav right cluster (links + CTA) */
+        .nav-right { display: flex; align-items: center; gap: 28px; }
+
+        /* Hero conversion microcopy under the CTA */
+        .hero-note {
+            font-family: var(--mono); font-size: 13px; color: var(--text-dimmer);
+            margin-top: 20px; letter-spacing: 0.02em;
+        }
+        .hero-note .dot { color: var(--accent); opacity: 0.55; margin: 0 9px; }
+
+        /* Closing hosted CTA */
+        .cta-final { border-top: 1px solid var(--border); text-align: center; }
+        .cta-final .section-label { display: block; }
+        .cta-final .section-text { max-width: 580px; margin: 0 auto; }
+        .cta-final .hero-cta { margin-top: 32px; }
+
+        /* Hosted cross-link inside the self-host section */
+        .install-hosted-note { margin-top: 14px; font-size: 14px; color: var(--text-dim); }
+        .install-hosted-note a {
+            color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-dim);
+        }
+        .install-hosted-note a:hover { border-color: var(--accent); }
 
         /* Section headers */
         .section-label {
@@ -254,8 +278,8 @@
         @media (max-width: 640px) {
             section { padding: 60px 0; }
             .hero { padding: 140px 0 80px; }
-            .nav-links { gap: 16px; }
-            .nav-links a { font-size: 12px; }
+            .nav-links { display: none; }
+            .btn-nav { padding: 7px 14px; }
             .install-step { flex-direction: column; gap: 12px; }
             footer .container { flex-direction: column; gap: 16px; text-align: center; }
             .scenario { padding: 20px; }
@@ -268,11 +292,14 @@
 <nav>
     <div class="container">
         <a href="#" class="nav-logo">LETHE</a>
-        <ul class="nav-links">
-            <li><a href="#architecture">Architecture</a></li>
-            <li><a href="#install">Install</a></li>
-            <li><a href="https://github.com/atemerev/lethe">GitHub</a></li>
-        </ul>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#install">Self-host</a></li>
+                <li><a href="https://github.com/atemerev/lethe">GitHub</a></li>
+            </ul>
+            <a href="https://app.lethe.gg" class="btn btn-primary btn-nav">Try free →</a>
+        </div>
     </div>
 </nav>
 
@@ -285,12 +312,14 @@
             Lethe is a cognitive runtime with brain regions that run on their
             own clocks: one that talks, one that remembers, one that drifts
             through your old conversations at 3 AM looking for things that
-            slipped. She lives on your machine, and she never stops thinking.
+            slipped. She lives wherever you put her — your machine, or ours —
+            and she never stops thinking.
         </p>
         <div class="hero-cta">
-            <a href="#install" class="btn btn-primary">Bring her up</a>
-            <a href="https://github.com/atemerev/lethe" class="btn btn-ghost">Read the source ↗</a>
+            <a href="https://app.lethe.gg" class="btn btn-primary">Try Lethe free →</a>
+            <a href="#install" class="btn btn-ghost">Self-host it</a>
         </div>
+        <p class="hero-note">No install, no API keys — hosted and ready in minutes.<span class="dot">·</span>14-day free trial<span class="dot">·</span>no credit card</p>
     </div>
 </section>
 
@@ -458,6 +487,7 @@
     <div class="container">
         <div class="section-label">// get started</div>
         <div class="section-title">Two minutes to memory.</div>
+        <p class="install-hosted-note">Rather not run it yourself? <a href="https://app.lethe.gg">Try hosted Lethe — free for 14 days →</a></p>
 
         <div class="tab-bar">
             <button class="tab-btn active" onclick="showTab('cloud')">Cloud LLM</button>
@@ -548,6 +578,24 @@
                 </ul>
             </div>
         </div>
+    </div>
+</section>
+
+<section class="cta-final">
+    <div class="container">
+        <div class="section-label">// hosted</div>
+        <div class="section-title">Don't want to run a server? Don't.</div>
+        <div class="section-text">
+            Hosted Lethe is the whole thing — persistent memory, background
+            thought, the 3 AM drift — managed and always on, in your browser and
+            on Telegram. No server to keep alive, no API keys to wrangle, no
+            maintenance. Start free; $19.95/mo once she's yours.
+        </div>
+        <div class="hero-cta">
+            <a href="https://app.lethe.gg" class="btn btn-primary">Start your free trial →</a>
+            <a href="#install" class="btn btn-ghost">Or self-host it →</a>
+        </div>
+        <p class="hero-note">14-day free trial<span class="dot">·</span>no credit card<span class="dot">·</span>cancel anytime</p>
     </div>
 </section>
 
