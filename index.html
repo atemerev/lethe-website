@@ -244,29 +244,6 @@
         footer { border-top: 1px solid var(--border); padding: 40px 0; }
         footer .container { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
         .footer-left { font-family: var(--mono); font-size: 13px; color: var(--text-dimmer); }
-        .sms-badge {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 6px 12px;
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            font-family: var(--mono); font-size: 11px;
-            color: var(--text-dim);
-            text-transform: lowercase;
-            letter-spacing: 0.04em;
-        }
-        .sms-badge .ch-flag {
-            display: inline-block;
-            width: 14px; height: 14px;
-            background: #ff0000;
-            position: relative;
-            border-radius: 1px;
-        }
-        .sms-badge .ch-flag::before,
-        .sms-badge .ch-flag::after {
-            content: ''; position: absolute; background: #fff;
-        }
-        .sms-badge .ch-flag::before { left: 3px; right: 3px; top: 6px; height: 2px; }
-        .sms-badge .ch-flag::after { top: 3px; bottom: 3px; left: 6px; width: 2px; }
         .footer-links { display: flex; gap: 20px; }
         .footer-links a {
             font-family: var(--mono); font-size: 13px; color: var(--text-dim);
@@ -296,7 +273,7 @@
             <ul class="nav-links">
                 <li><a href="#architecture">Architecture</a></li>
                 <li><a href="#install">Self-host</a></li>
-                <li><a href="https://github.com/atemerev/lethe">GitHub</a></li>
+                <li><a href="https://github.com/alien-id/lethe">GitHub</a></li>
             </ul>
             <a href="https://app.lethe.gg" class="btn btn-primary btn-nav">Try free →</a>
         </div>
@@ -574,7 +551,7 @@
                     <li>GPU with ~48GB+ VRAM (2x RTX 4090 for Q4, 4x for Q8)</li>
                     <li>A <a href="https://t.me/BotFather">Telegram Bot Token</a></li>
                     <li>A <a href="https://huggingface.co/bartowski">Gemma 4 31B GGUF</a> model file</li>
-                    <li>See <a href="https://github.com/atemerev/lethe#running-locally-with-gemma-4">full local setup guide</a> in the README</li>
+                    <li>See <a href="https://github.com/alien-id/lethe#running-locally-with-gemma-4">full local setup guide</a> in the README</li>
                 </ul>
             </div>
         </div>
@@ -602,13 +579,9 @@
 <footer>
     <div class="container">
         <div class="footer-left">lethe · open source · MIT</div>
-        <span class="sms-badge">
-            <span class="ch-flag" aria-hidden="true"></span>
-            <span>swiss made software</span>
-        </span>
         <div class="footer-links">
-            <a href="https://github.com/atemerev/lethe">GitHub</a>
-            <a href="https://github.com/atemerev/lethe/issues">Issues</a>
+            <a href="https://github.com/alien-id/lethe">GitHub</a>
+            <a href="https://github.com/alien-id/lethe/issues">Issues</a>
         </div>
     </div>
 </footer>
